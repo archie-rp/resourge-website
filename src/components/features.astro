@@ -1,0 +1,75 @@
+---
+import Link from "@components/ui/link.astro";
+
+type Feature = {
+  title: string;
+  description: string;
+  href: string;
+};
+
+const features: Feature[] = [
+  {
+    title: "React Form",
+    description:
+      "Build forms easily in React with customizable options and validations.",
+    href: "",
+  },
+  {
+    title: "Schemas",
+    description:
+      "Simplify the validation of complex data structures with nested schemas and custom rules.",
+    href: "",
+  },
+  {
+    title: "Translations",
+    description:
+      "Create multilingual applications easily with a simple API and a way to handle translation keys",
+    href: "",
+  },
+  {
+    title: "Fetch",
+    description:
+      "Fetch data in your React application with a simpler Service, while still providing useful features like caching and retrying.",
+    href: "",
+  },
+  {
+    title: "JSExcel",
+    description:
+      "Read and write Excel files in the browser with a simple API, making it easy to integrate Excel functionality into your web application",
+    href: "",
+  },
+];
+---
+
+<div class="grid sm:grid-cols-2 md:grid-cols-3 mb-16 gap-16">
+  {
+    features.map((item) => (
+      <div class="flex gap-4 items-start">
+        <div class="flex flex-col justify-between">
+          <h3 class="font-semibold text-lg">{item.title}</h3>{" "}
+          <p class="text-slate-500 mt-2 leading-relaxed">{item.description}</p>
+          <div class="pt-5">
+            <Link href={item.href} size="md">Get Started</Link>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<div class="md:mt-0">
+  <h2 class="text-3xl lg:text-5xl font-bold lg:tracking-tight">Typescript</h2>
+  <p class="text-lg mt-4 text-slate-600">
+    Each of these libraries is fully typed with TypeScript, providing an added
+    level of type safety to your applications.
+  </p>
+  <p class="text-lg mt-1 text-slate-600">
+    Our focus on plain JavaScript means that our libraries can be easily adapted
+    to work with other frameworks or libraries, without any extra configuration.
+  </p>
+  <p class="text-lg mt-1 text-slate-600">
+    Whether you're building a new application from scratch or adding
+    functionality to an existing project, Resourge's TypeScript libraries make
+    development faster, easier, and more reliable.
+  </p>
+</div>
