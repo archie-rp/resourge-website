@@ -1,149 +1,33 @@
 ---
-import AstroLogo from './AstroLogo.astro';
-import SkipToContent from './SkipToContent.astro';
-import SidebarToggle from './SidebarToggle';
-import LanguageSelect from './LanguageSelect';
-import Search from './Search';
-import { KNOWN_LANGUAGE_CODES, SITE } from 'shared/constants/consts';
-import { getLanguageFromURL } from 'shared/constants/languages';
+import Container from "@components/container.astro";
+import Dropdown from "@components/navbar/dropdown.astro";
+import Link from "@components/ui/link.astro";
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import { getLibraryFromURL } from "shared/constants/libraries";
+import ThemeToggleButton from '../../themeToggleButton/ThemeToggleButton'
 
-type Props = {
-	currentPage: string;
-};
+const currentPageTitle = getLibraryFromURL(Astro.url.pathname)
 
-const { currentPage } = Astro.props;
-const lang = getLanguageFromURL(currentPage);
 ---
 
-<header>
-	<SkipToContent />
-	<nav class="nav-wrapper" title="Top Navigation">
-		<div class="menu-toggle">
-			<SidebarToggle client:idle />
-		</div>
-		<div class="logo flex">
-			<a href="/">
-				<AstroLogo size={40} />
-				<h1>{SITE.title ?? 'Documentation'}</h1>
-			</a>
-		</div>
-		<div style="flex-grow: 1;"></div>
-		{KNOWN_LANGUAGE_CODES.length > 1 && <LanguageSelect lang={lang} client:idle />}
-		<div class="search-item">
-			<Search client:idle />
-		</div>
-	</nav>
-</header>
-
-<style>
-	header {
-		z-index: 11;
-		height: var(--theme-navbar-height);
-		width: 100%;
-		background-color: var(--theme-navbar-bg);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		position: sticky;
-		top: 0;
-	}
-
-	.logo {
-		flex: 1;
-		display: flex;
-		overflow: hidden;
-		width: 30px;
-		font-size: 2rem;
-		flex-shrink: 0;
-		font-weight: 600;
-		line-height: 1;
-		color: hsla(var(--color-base-white), 100%, 1);
-		gap: 0.25em;
-		z-index: -1;
-	}
-
-	.logo a {
-		display: flex;
-		padding: 0.5em 0.25em;
-		margin: -0.5em -0.25em;
-		text-decoration: none;
-		font-weight: bold;
-	}
-
-	.logo a {
-		transition: color 100ms ease-out;
-		color: var(--theme-text);
-	}
-
-	.logo a:hover,
-	.logo a:focus {
-		color: var(--theme-text-accent);
-	}
-
-	.logo h1 {
-		display: none;
-		font: inherit;
-		color: inherit;
-		margin: 0;
-	}
-
-	.nav-wrapper {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 1em;
-		width: 100%;
-		max-width: 82em;
-		padding: 0 1rem;
-	}
-
-	@media (min-width: 50em) {
-		header {
-			position: static;
-			padding: 2rem 0rem;
-		}
-
-		.logo {
-			width: auto;
-			margin: 0;
-			z-index: 0;
-		}
-
-		.logo h1 {
-			display: initial;
-		}
-
-		.menu-toggle {
-			display: none;
-		}
-	}
-
-	/** Style Algolia */
-	:root {
-		--docsearch-primary-color: var(--theme-accent);
-		--docsearch-logo-color: var(--theme-text);
-	}
-
-	.search-item {
-		display: none;
-		position: relative;
-		z-index: 10;
-		flex-grow: 1;
-		padding-right: 0.7rem;
-		display: flex;
-		max-width: 200px;
-	}
-
-	@media (min-width: 50em) {
-		.search-item {
-			max-width: 400px;
-		}
-	}
-</style>
-
-<style is:global>
-	.search-item > * {
-		flex-grow: 1;
-	}
-</style>
+<Container>
+  <header class="flex flex-col lg:flex-row justify-between items-center my-5 w-full">
+    <Astronav>
+      <div class="flex w-full lg:w-auto items-center justify-between items-center">
+        <a href="/" class="text-lg">
+          <span class="font-bold text-slate-800">Resourge</span>
+        </a>
+        <span class="ml-4 text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 rounded-full bg-white text-gray-700 border">{currentPageTitle}</span>
+        <div class="block lg:hidden">
+          <MenuIcon class="w-4 h-4 text-gray-800" />
+        </div>
+      </div>
+    </Astronav>
+    <div>
+      <div class="hidden lg:flex items-center gap-4">
+        <ThemeToggleButton client:visible />
+        <Link href="https://github.com/resourge" size="md">Github</Link>
+      </div>
+    </div>
+  </header>
+</Container>

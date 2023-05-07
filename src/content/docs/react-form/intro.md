@@ -1,10 +1,6 @@
 ---
-title: "Introduction"
-description: "Docs intro"
+title: "Quick Start"
 ---
-
-
-# Quick Start
 
 To quickly start validating forms with Schema Validator, follow these steps:
 

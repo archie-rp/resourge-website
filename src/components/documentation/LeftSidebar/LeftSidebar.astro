@@ -1,6 +1,6 @@
 ---
 import { SIDEBAR } from 'shared/constants/consts';
-import { getLanguageFromURL } from 'shared/constants/languages';
+import { getLibraryFromURL } from 'shared/constants/libraries';
 
 
 
@@ -12,8 +12,9 @@ const { currentPage } = Astro.props;
 const currentPageMatch = currentPage.endsWith('/')
 	? currentPage.slice(1, -1)
 	: currentPage.slice(1);
-const langCode = getLanguageFromURL(currentPage);
-const sidebar = SIDEBAR[langCode];
+const libraryCode = getLibraryFromURL(currentPage);
+const sidebar = SIDEBAR[libraryCode];
+
 ---
 
 <nav aria-labelledby="grid-left">
@@ -79,11 +80,11 @@ const sidebar = SIDEBAR[langCode];
 	}
 
 	.nav-group-title {
-		font-size: 1rem;
-		font-weight: 700;
-		padding: 0.1rem 1rem;
-		text-transform: uppercase;
-		margin-bottom: 0.5rem;
+		font-size: 1rem !important;
+		font-weight: 700 !important;
+		padding: 0.1rem 1rem !important;
+		text-transform: uppercase !important;
+		margin-bottom: 0.5rem !important;
 	}
 
 	.nav-link a {

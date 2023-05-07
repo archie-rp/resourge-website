@@ -19,6 +19,9 @@
 	}
 }
 
+ol, ul, menu {
+	list-style: decimal !important;
+}
 nav ul {
 	list-style: none;
 	padding: 0;
@@ -58,16 +61,18 @@ h2 {
 }
 
 h1 {
-	font-size: 3.25rem;
-	font-weight: 800;
+	font-size: 3rem !important;
+	font-weight: 700 !important;
 }
 
 h2 {
-	font-size: 2.5rem;
+	font-size: 2rem !important;
+	font-weight: 700 !important;
 }
 
 h3 {
-	font-size: 1.75rem;
+	font-size: 1.5rem !important;
+	font-weight: 700 !important;
 }
 
 h4 {
@@ -102,6 +107,16 @@ a {
 	text-underline-offset: 0.08em;
 	align-items: center;
 	gap: 0.5rem;
+}
+
+a.link {
+	all: unset;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+ul {
+	list-style-type: circle !important;
 }
 
 article > section :is(ul, ol) > * + * {
@@ -180,10 +195,10 @@ strong {
 code {
 	--border-radius: 3px;
 	--padding-block: 0.2rem;
-	--padding-inline: 0.33rem;
+	--padding-inline: 0.1rem;
 
-	font-family: var(--font-mono);
-	font-size: 0.85em;
+	font-family: var(--font-mono) !important;
+	font-size: 0.8rem !important;
 	color: inherit;
 	background-color: var(--theme-code-inline-bg);
 	padding: var(--padding-block) var(--padding-inline);
@@ -259,11 +274,11 @@ blockquote code {
 
 
 h2.heading {
-	font-size: 1rem;
-	font-weight: 700;
-	padding: 0.1rem 1rem;
-	text-transform: uppercase;
-	margin-bottom: 0.5rem;
+	font-size: 1rem !important;
+	font-weight: 700 !important;
+	padding: 0.1rem 1rem !important;
+	text-transform: uppercase !important;
+	margin-bottom: 0.5rem !important;
 }
 
 .header-link {
