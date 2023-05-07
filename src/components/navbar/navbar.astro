@@ -2,7 +2,7 @@
 import Container from "@components/container.astro";
 import Link from "@components/ui/link.astro";
 import { Astronav, MenuIcon } from "astro-navbar";
-
+import ThemeToggleButton from '../themeToggleButton/ThemeToggleButton'
 ---
 
 <Container>
@@ -19,6 +19,7 @@ import { Astronav, MenuIcon } from "astro-navbar";
     </Astronav>
     <div>
       <div class="hidden lg:flex items-center gap-4">
+        <ThemeToggleButton client:visible />
         <Link href="https://github.com/resourge/schema" size="md">Github</Link>
       </div>
     </div>

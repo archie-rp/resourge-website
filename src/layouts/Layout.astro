@@ -2,6 +2,7 @@
 import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
+import HeadCommon from '../components/HeadCommon.astro';
 import "@fontsource/inter/variable.css";
 
 export interface Props {
@@ -29,6 +30,7 @@ const makeTitle = "Resourge libraries"
     <meta name="generator" content={Astro.generator} />
 
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
+    <HeadCommon />
     <SEO
       title={makeTitle}
       description="Libraries for web development."
