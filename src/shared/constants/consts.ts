@@ -12,6 +12,7 @@ export const OPEN_GRAPH = {
 };
 
 export const Libraries = {
+	HomePage: '/',
 	ReactForm: 'react-form',
 } as const;
 export const LibrariesValues = Object.values(Libraries);
@@ -49,4 +50,5 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Playground', link: 'react-form/playground' }
 		]
 	},
+	'/': {}
 };

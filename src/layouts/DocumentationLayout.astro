@@ -3,12 +3,12 @@ import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import HeadCommon from '../components/HeadCommon.astro';
 import HeadSEO from '../components/documentation/HeadSEO.astro';
-import Header from '../components/documentation/Header/Header.astro';
 import PageContent from '../components/documentation/PageContent/PageContent.astro';
 import LeftSidebar from '../components/documentation/LeftSidebar/LeftSidebar.astro';
 import RightSidebar from '../components/documentation/RightSidebar/RightSidebar.astro';
 import Footer from '../components/documentation/Footer/Footer.astro';
 import { GITHUB_EDIT_URL, SITE } from 'shared/constants/consts';
+import Navbar from '@components/navbar/navbar.astro';
 
 
 type Props = CollectionEntry<'docs'>['data'] & {
@@ -20,6 +20,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const currentPage = Astro.url.pathname;
 const currentFile = `src/content/docs${currentPage.replace(/\/$/, '')}.md`;
 const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
+
 ---
 
 <html dir={data.dir} lang={data.lang} class="initial">
@@ -121,7 +122,7 @@ const githubEditUrl = `${GITHUB_EDIT_URL}/${currentFile}`;
 	</head>
 
 	<body>
-		<Header currentPage={currentPage} />
+		<Navbar currentPage={canonicalURL.pathname}/>
 		<main class="layout">
 			<aside id="grid-left" class="grid-sidebar" title="Site Navigation">
 				<LeftSidebar currentPage={currentPage} />
