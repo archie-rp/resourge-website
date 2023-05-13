@@ -5,7 +5,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import preact from '@astrojs/preact';
 import react from '@astrojs/react';
-import netlify from "@astrojs/netlify/functions";
+
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,5 +19,5 @@ export default defineConfig({
   // Enable React for the Algolia search component.
   react()],
   output: "server",
-  adapter: netlify()
+  adapter: vercel()
 });
