@@ -2,76 +2,114 @@
 title: "Quick Start"
 ---
 
-To quickly start validating forms with Schema Validator, follow these steps:
+## Installation
 
-1. Clone the library from the GitHub repository:
-```bash
-  git clone https://github.com/resourge/schema.git
-```
-2. Install the library using either `npm` or `yarn`:
-```bash
-  npm install @resourge/schema --save
-  # OR
-  yarn add @resourge/schema
-```
-3. Import the desired validation functions from the library:
-```javascript
-  import { object, string, number, array } from '@resourge/schemas';
-```
-4. Create a schema object that defines the structure of the form and its validation rules:
-```javascript
-  const schema = object<User>({
-    name: string().min(5).required(),
-    age: number().min(18).required(),
-    location: object({
-      city: string().required(),
-      address: string().required(),
-      postalCode: string().postalCode(PostalCodes.PT).required(),
-      country: string().min(3).required(),
-    }).required(),
-    hobbies: array(string()).min(1).required(),
-  }).compile();
-```
-5. Validate the form data using the schema:
-```javascript
-  const schemaErrors = schema.validate(user)
-  const isValidUser = schema.isValid(user)
+Install using [Yarn](https://yarnpkg.com):
+
+```sh
+yarn add @resourge/react-form
 ```
 
-## Compatibility
+or NPM:
 
-Schema Validator is compatible with:
-- [ReactJS](https://reactjs.com/) - ReactJS
-- [React Native](https://react-native.org/) - React Native (Mobile)
-
-## Performance
-
-The following benchmark results compare Schema Validator with other schema validators:
-### Normal
-
-```bash
-@resourge/schema x 18,634,802 ops/sec ±1.30%  (93 runs sampled)
-Fast Validator   x  1,632,544 ops/sec ±0.50%  (92 runs sampled)
-joi              x    182,179 ops/sec ±1.15%  (93 runs sampled)
-zod              x     52,358 ops/sec ±0.86%  (89 runs sampled)
-Yup              x      8,573 ops/sec ±4.42%  (81 runs sampled)
-Fastest is  [ '@resourge/schema' ]
+```sh
+npm install @resourge/react-form --save
 ```
 
-### Heavy (done with an array with 10,000 items)
+## Setup Errors
 
-```bash
-@resourge/schema x    2,594 ops/sec ±0.80% (86 runs sampled)
-Fast Validator   x      227 ops/sec ±0.96% (82 runs sampled)
-joi              x    32.28 ops/sec ±2.86% (55 runs sampled)
-zod              x    21.99 ops/sec ±1.58% (40 runs sampled)
-Yup              x    15.65 ops/sec ±2.47% (43 runs sampled)
-Fastest is  [ '@resourge/schema' ]
+To simplify the process of converting errors from validation packages like joi, yup, zod, ajv, etc to `useForm` lookalike errors, use `setDefaultOnError`.
+You only need to setup this on the initialization of the application in this case App.tsx
+
+`setDefaultOnError` will, by default (unless `onError` from [Form Options](#form-options) is set), customize the errors to fit `useForm` errors
+
+```jsx
+// In App.tsx
+import { setDefaultOnError } from '@resourge/react-form'
+
+setDefaultOnError((errors: any) => {
+  // Customize errors to fit the model 
+  // [{ path, errors }]
+  return []
+});
 ```
 
-Note: The performance may vary depending on the machine.
+_Note: We plan to add more default validations in the future. If you have one and want to share, please do and contribute._
+
+For yup validation, `setFormYupValidation`
+
+```jsx
+// In App.tsx
+import { setFormYupValidation } from '@resourge/react-form'
+
+setFormYupValidation();
+```
+
+## Usage
+
+```jsx
+const {
+  form, // Form Data
+  touches, isTouched, // Form touches
+  errors, isValid, // Form validation
+  context, // Context
+  triggerChange, reset, merge,
+  handleSubmit, field,
+  onChange, getValue, changeValue,changeValue, 
+  resetTouch,
+  getErrors, setError, hasError, 
+  watch,
+  undo, redo
+} = useForm(formData, formOptions)
+```
+
+`useForm` is the hook necessary to create forms. Using [formData](#form-data) and [formOptions](#form-options), the hook returns an array containing the [form state](#form-state-and-actions) and the [form actions](#form-state-and-actions).
+
+## Quickstart
+
+See more at [Errors](#errors)
+
+```jsx
+import React, { useState } from 'react';
+import { useForm } from '@resourge/react-form';
+
+export default function Form() {
+  const { 
+    isValid,
+    field, 
+    handleSubmit 
+  } = useForm(
+    { 
+      name: 'Rimuru' 
+    }
+  )
+
+  const onSubmit = handleSubmit((form) => {
+    ....
+  })
+
+  return (
+    <form onSubmit={onSubmit}>
+      <input { ...field('name') }/>
+      <span>
+      {
+        isValid ? "Valid" : "Invalid" 
+      } Form
+      </span>
+      <button type="submit">
+        Save
+      </button>
+    </form>
+  );
+}
+```
+
+. 
+
+_Note: `<form></form>` the usage of form as wrapper is optional._
+
+
 
 ## Known Bugs
 
-- Let's us know if any <a href="https://github.com/resourge/schema/issues">here</a>.
-
+- Let's us know if any <a href="https://github.com/resourge/react-form/issues">here</a>.

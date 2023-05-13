@@ -1,9 +1,10 @@
 ---
-title: "Playground"
+sidebar_position: 3
 ---
 
-A playground that contains an `example` of a test validation for a form using schema validation for a `user`.
+# Playground
 
-[Link example](https://dm3d4f.csb.app/)
+Example form to create a user.
 
-<iframe src="https://codesandbox.io/s/dm3d4f" width="100%" height="400"></iframe>
+[Try out in Sandbox](https://codesandbox.io/s/resourge-react-form-59g2br)
+

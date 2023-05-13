@@ -1,0 +1,71 @@
+---
+title: 'Service Loader'
+---
+
+
+Component with loaderId to trigger loading at the useFetch or LoadingService command.
+Serves as the global type, where it shows the loading on the entire page.
+By default loaderId is ''.
+
+_Note: Make sure the component is the last one in App/index and it is not inside any style that can influence a absolute position._
+
+```jsx
+import React from 'react'
+
+import {
+  GlobalLoader
+} from '@resourge/react-fetch'
+
+function Foo() {
+  const [data, fetch, error, isLoading] = useFetch(
+    async () => {
+      return // Axios/fetch/HttpService
+    }, 
+    {
+      initialState: [],
+	  useLoadingService: true // Will trigger GlobalLoader
+    }
+  );
+
+  return (
+	...
+  )
+}
+
+
+function App() {
+  return (
+	<div>
+	  ...// Other Components
+	  <Foo />
+	  <GlobalLoader
+	    // Optional, in case it is undefined it will use GlobalLoader component.
+	    loadingElement={<div>Loading Message</div>}
+	  />
+	</div>
+  )
+}
+
+export default App
+```
+
+## LoadingService
+
+Simple global service to show/hide a ```<Loader />```.
+
+```jsx
+import { LoadingService } from '@resourge/react-fetch';
+
+LoadingService.show() // Will trigger GlobalLoader
+LoadingService.show('Loader Id') // To show specific ```<Loader />```
+
+LoadingService.hide()
+LoadingService.hide('Loader Id') // To hide specific ```<Loader />```
+
+const removeEventListener = LoadingService.addEventListener(
+  'Loader Id',
+  (loading: boolean) => {
+  
+  }
+)
+```
