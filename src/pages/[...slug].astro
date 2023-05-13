@@ -2,20 +2,15 @@
 import { CollectionEntry, getCollection } from 'astro:content';
 import DocumentationLayout from '../layouts/DocumentationLayout.astro';
 
-export async function getStaticPaths() {
-	const docs = await getCollection('docs');
-
-	return docs.map((entry) => ({
-		params: {
-			slug: entry.slug,
-		},
-		props: entry,
-	}));
-}
 type Props = CollectionEntry<'docs'>;
 
-const post = Astro.props;
+const posts = await getCollection('docs');
+
+const { slug } = Astro.params;
+const post = posts.find((page) => page.slug === slug);
+if (!post) return Astro.redirect("/404");
 const { Content, headings } = await post.render();
+
 ---
 
 <DocumentationLayout headings={headings} {...post.data}>
