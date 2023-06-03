@@ -18,6 +18,7 @@ export const Libraries = {
 	Router: 'react-router',
 	Table: 'react-hook-table',
 	ReactSearchParams: 'react-search-params',
+	Translations: 'translations',
 	Fetch: 'fetch'
 } as const;
 export const LibrariesValues = Object.values(Libraries);
@@ -104,6 +105,16 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Hooks', link: 'fetch/hooks' },
 			{ text: 'Loader', link: 'fetch/loader' },
 			{ text: 'Http Service', link: 'fetch/http-service' },
+		],
+	},
+	'translations': {
+		'Guide': [
+			{ text: 'Get Started', link: 'translations/intro' },
+		],
+		'Documentation': [
+			{ text: 'useTranslation', link: 'translations/hook' },
+			{ text: 'Typescript', link: 'translations/typescript' },
+			{ text: 'Plugin Vite', link: 'translations/plugin' },
 		],
 	},
 	'/': {}
