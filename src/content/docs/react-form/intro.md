@@ -16,36 +16,9 @@ or NPM:
 npm install @resourge/react-form --save
 ```
 
-## Setup Errors
-
-To simplify the process of converting errors from validation packages like joi, yup, zod, ajv, etc to `useForm` lookalike errors, use `setDefaultOnError`.
-You only need to setup this on the initialization of the application in this case App.tsx
-
-`setDefaultOnError` will, by default (unless `onError` from [Form Options](#form-options) is set), customize the errors to fit `useForm` errors
-
-```jsx
-// In App.tsx
-import { setDefaultOnError } from '@resourge/react-form'
-
-setDefaultOnError((errors: any) => {
-  // Customize errors to fit the model 
-  // [{ path, errors }]
-  return []
-});
-```
-
-_Note: We plan to add more default validations in the future. If you have one and want to share, please do and contribute._
-
-For yup validation, `setFormYupValidation`
-
-```jsx
-// In App.tsx
-import { setFormYupValidation } from '@resourge/react-form'
-
-setFormYupValidation();
-```
-
 ## Usage
+
+The `useForm` hook is necessary to create forms. It takes in `formData` and `formOptions` as parameters and returns an object containing the `form state` and the form actions.
 
 ```jsx
 const {
@@ -55,23 +28,43 @@ const {
   context, // Context
   triggerChange, reset, merge,
   handleSubmit, field,
-  onChange, getValue, changeValue,changeValue, 
+  onChange, getValue, changeValue, changeValue, 
   resetTouch,
   getErrors, setError, hasError, 
   watch,
   undo, redo
-} = useForm(formData, formOptions)
+} = useForm(formData, formOptions);
+
 ```
 
-`useForm` is the hook necessary to create forms. Using [formData](#form-data) and [formOptions](#form-options), the hook returns an array containing the [form state](#form-state-and-actions) and the [form actions](#form-state-and-actions).
+Note: If you are using the `@resourge/schema` package or your own schema, you don't need to perform any additional configuration for error setup.
 
-## Quickstart
+Here's an example of setting up error conversion using a different schema:
 
-See more at [Errors](#errors)
 
 ```jsx
-import React, { useState } from 'react';
-import { useForm } from '@resourge/react-form';
+import { setDefaultOnError } from '@resourge/react-form';
+import * as yup from 'yup';
+
+setDefaultOnError((errors) => {
+  // Customize errors to fit the model [{ path, errors }]
+  const formErrors = [];
+
+  errors.inner.forEach((error) => {
+    const path = error.path;
+    const message = error.message;
+    formErrors.push({ path, errors: [message] });
+  });
+
+  return formErrors;
+});
+
+// Set up Yup validation
+const schema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  // Define other form fields and validation rules
+});
+
 
 export default function Form() {
   const { 
@@ -79,37 +72,61 @@ export default function Form() {
     field, 
     handleSubmit 
   } = useForm(
-    { 
+    {
       name: 'Rimuru' 
+      // Initialize form data based on the schema
+    },
+    {
+      validationSchema: schema
+      // Pass the schema to formOptions
     }
-  )
+  );
 
   const onSubmit = handleSubmit((form) => {
-    ....
-  })
+    // Handle form submission
+  });
 
   return (
     <form onSubmit={onSubmit}>
-      <input { ...field('name') }/>
-      <span>
-      {
-        isValid ? "Valid" : "Invalid" 
-      } Form
-      </span>
-      <button type="submit">
-        Save
-      </button>
+      <input {...field('name')} />
+      <span>{isValid ? "Valid" : "Invalid"} Form</span>
+      <button type="submit">Save</button>
     </form>
   );
 }
+
 ```
 
-. 
+## Quickstart
 
-_Note: `<form></form>` the usage of form as wrapper is optional._
+For a quickstart example, you can follow the code below:
 
+```jsx
+import React from 'react';
+import { useForm } from '@resourge/react-form';
 
+export default function Form() {
+  const { 
+    isValid,
+    field, 
+    handleSubmit 
+  } = useForm({
+    name: 'Rimuru' 
+  });
 
-## Known Bugs
+  const onSubmit = handleSubmit((form) => {
+    // Handle form submission
+  });
 
-- Let's us know if any <a href="https://github.com/resourge/react-form/issues">here</a>.
+  return (
+    <form onSubmit={onSubmit}>
+      <input {...field('name')} />
+      <span>{isValid ? "Valid" : "Invalid"} Form</span>
+      <button type="submit">Save</button>
+    </form>
+  );
+}
+
+```
+
+**Note: The usage of `<form></form>` as a wrapper is optional.**
