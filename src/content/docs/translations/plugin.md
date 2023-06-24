@@ -6,12 +6,28 @@ title: "Configuration for Vitejs"
 
 To split translations into separate files and optimize bundle size in Vite.js, follow these steps:
 
-### Update Vite Configuration
+### Update Vite Configuration for Vue
 
 In the `vite.config.js` file, import the necessary packages and configure Vite with the `viteTranslationPlugin`:
 
 ``` javascript
 import { viteTranslationPlugin } from '@resourge/vue-translations/viteTranslationPlugin';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [
+    viteTranslationPlugin()
+  ]
+});
+
+```
+
+### Update Vite Configuration for React
+
+In the `vite.config.js` file, import the necessary packages and configure Vite with the `viteTranslationPlugin`:
+
+``` javascript
+import { viteTranslationPlugin } from '@resourge/react-translations/viteTranslationPlugin';
 import { defineConfig } from 'vite';
 
 export default defineConfig({

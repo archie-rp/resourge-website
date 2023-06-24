@@ -27,7 +27,7 @@ A `test` function is a normal sync validation that takes two arguments: `value` 
 
 ```javascript
 string().test((value, form) => [{
-  key: '',
+  path: '',
   error: 'Custom error Message'
 }])
 ```
@@ -36,7 +36,7 @@ Alternatively, you can pass an object with a `test` property that is a mandatory
 
 ```javascript
 string().test({
-  test: (value, form) => true,
+  path: (value, form) => true,
   message: 'Custom error Message'
 })
 ```
@@ -48,7 +48,7 @@ An `asyncTest` function is a normal async validation that takes two arguments: `
 ```javascript
 string().asyncTest(
   (value, form) => Promise.resolve([{
-    key: '',
+    path: '',
     error: 'Custom error Message'
   }])
 )
@@ -101,7 +101,7 @@ The errors are returned in the following format:
 ```javascript
 [
   { 
-    key: 'age',
+    path: 'age',
     error: 'Requires to have at least minimum size of 20'
   }
 ]
@@ -239,3 +239,93 @@ const schema = S.string().notNullable().compile();
 schema.validate('hello'); // passes validation
 schema.validate(null); // fails validation
 ```
+
+## when
+
+The `when` method in the schema allows you to conditionally apply validation rules based on the value of a specified field. It can be used with various primary value types such as date, string, number, and more.
+
+### Usage with Date
+
+```javascript
+import { date } from '@resourge/schema';
+
+date().when('imported', {
+  is: true,
+  then: (schema) => {
+    // Validation rules for when 'imported' is true
+    return schema.required('errorMessages.formFieldRequired').test((value) => {
+      if (!DateUtils.isBeforeCurrentDate(value)) {
+        return [{
+          path: 'date',
+          error: 'errorMessages.formFieldDateBeforeTodayRequired'
+        }];
+      }
+      return [];
+    });
+  },
+  otherwise: (schema) => {
+    // Validation rules for when 'imported' is false or undefined
+    return schema.notRequired();
+  }
+});
+```
+
+### Usage with String
+
+```javascript
+import { string } from '@resourge/schema';
+
+string().when('priority', {
+  is: 'high',
+  then: (schema) => {
+    // Validation rules for when 'priority' is 'high'
+    return schema.required('errorMessages.formFieldRequired');
+  },
+  otherwise: (schema) => {
+    // Validation rules for when 'priority' is not 'high'
+    return schema.notRequired();
+  }
+});
+
+```
+
+### Usage with Number
+
+```javascript
+import { number } from '@resourge/schema';
+
+number().when('quantity', {
+  is: (value) => value > 0,
+  then: (schema) => {
+    // Validation rules for when 'quantity' is greater than 0
+    return schema.required('errorMessages.formFieldRequired');
+  },
+  otherwise: (schema) => {
+    // Validation rules for when 'quantity' is not greater than 0
+    return schema.notRequired();
+  }
+});
+
+```
+
+### Usage with Any Primary Value Type
+
+```javascript
+import { any } from '@resourge/schema';
+
+any().when('field', {
+  is: (value) => value !== null && value !== undefined,
+  then: (schema) => {
+    // Validation rules for when 'field' is not null or undefined
+    return schema.required('errorMessages.formFieldRequired');
+  },
+  otherwise: (schema) => {
+    // Validation rules for when 'field' is null or undefined
+    return schema.notRequired();
+  }
+});
+
+
+```
+
+By using the `when` method in your schema, you can conditionally apply validation rules based on the value of a specific field, providing flexibility and customization to your data validation process.

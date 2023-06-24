@@ -72,13 +72,70 @@ export { TranslationInstance, useTranslation };
 
 ```
 
-## Usage
+## Overview
+
+The `useTranslation` hook provided by the `@resourge/translations` library offers various functionalities to simplify translation management in your Vue.js or React applications. This hook enables you to access translations, change the current language, and retrieve information about the available languages.
+
+## Usage useTranslation
+
+To use the `useTranslation` hook, you need to wrap your application with the `TranslationProvider` context. Here's an example of how to do it in a Vue.js application:
+
+### Vue.js Example
+
+1. Import the necessary modules and define the `TranslationInstance`:
+
+```vue
+<script lang="ts" setup>
+import { TranslationProvider } from '@resourge/vue-translations';
+import { TranslationInstance } from './shared/translations/Translations';
+</script>
+```
+2. Wrap your application's root component with the TranslationProvider:
+
+```vue
+<template>
+  <Suspense>
+    <TranslationProvider :TranslationInstance="(TranslationInstance as any)">
+      <RouterView />
+    </TranslationProvider>
+  </Suspense>
+</template>
+
+```
+In this example, the `TranslationInstance` is passed as a prop to the `TranslationProvider` component.
+
+## React Example
+
+1. Import the necessary modules and define the TranslationInstance:
+
+```javascript
+import { TranslationProvider } from '@resourge/react-translations';
+import { TranslationInstance } from './shared/translations/Translations';
+```
+
+Wrap your application's root component with the `TranslationProvider`:
+
+```tsx
+<React.Suspense>
+  <TranslationProvider TranslationInstance={TranslationInstance}>
+    <RouterView />
+  </TranslationProvider>
+</React.Suspense>
+```
+
+In this example, the `TranslationInstance` is passed as a prop to the `TranslationProvider` component.
+
+After wrapping your application with the `TranslationProvider`, you can use the `useTranslation` hook to access the `translation` functionalities as described in the previous section.
+
+**Make sure to replace the `TranslationInstance` import and usage with the actual implementation details specific to your application.**
+
+## Usage in component
 
 In your component, you can use the useTranslation hook to access the translation functionality:
 
 ```jsx
 import React from 'react';
-import { useTranslation } from '@resourge/translations';
+import { useTranslation } from './translations';  // the file created for the instance above configured
 
 export default function MyComponent() {
   const { T, changeLanguage } = useTranslation();
