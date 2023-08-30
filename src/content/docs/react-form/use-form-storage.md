@@ -10,7 +10,7 @@ _Note: By default it will clear the form from storage when submitted with succes
 
 ```jsx
 // object
-const { ... } = useForm(
+const { ... } = useFormStorage(
   ...,
   {
 	//... same as normal useForm
