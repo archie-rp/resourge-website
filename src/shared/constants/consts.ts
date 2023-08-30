@@ -42,11 +42,15 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'Get Started', link: 'react-form/intro' },
 		],
 		'Documentation': [
-			{ text: 'State', link: 'react-form/state' },
-			{ text: 'Hooks', link: 'react-form/hooks' },
 			{ text: 'Methods', link: 'react-form/actions' },
-			{ text: 'Provider', link: 'react-form/provider' },
+			{ text: 'Default Values', link: 'react-form/default-values' },
+			{ text: 'Form Provider Context', link: 'react-form/form-provider-context' },
+			{ text: 'Form Options', link: 'react-form/form-options' },
 			{ text: 'Controller', link: 'react-form/controller' },
+			{ text: 'useFormSplitter', link: 'react-form/use-form-splitter' },
+			{ text: 'useFormStorage', link: 'react-form/use-form-storage' },
+			{ text: 'Schema Validations', link: 'react-form/schema-validations' },
+			{ text: 'Setup Errors', link: 'react-form/setup-errors' },
 		],
 		'Try now': [
 			{ text: 'Playground', link: 'react-form/playground' }

@@ -6,7 +6,7 @@ title: "Methods"
 
 Returns the current URL object.
 
-```Typescript
+```tsx
 const url = useUrl();
 ```
 

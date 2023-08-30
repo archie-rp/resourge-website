@@ -2,6 +2,21 @@
 title: "Quick Start"
 ---
 
+# React-Form
+
+`react-form` is a simple and basic controlled hook form. Aiming to create forms with minimal effort.
+
+Visit our website [resourge-react-form.netlify.app](https://resourge-react-form.netlify.app)
+
+## Features
+
+- Controlled form.
+- Possibility of using `class` as default form data (see more [Form Data](#form-data)).
+- No native validation. The entire validation is up to the developer.
+- Simple to use with existing HTML form inputs and 3rd-party UI libraries.
+- Build with typescript.
+- Easy to use in react and react-native.
+
 ## Installation
 
 Install using [Yarn](https://yarnpkg.com):
@@ -16,117 +31,54 @@ or NPM:
 npm install @resourge/react-form --save
 ```
 
-## Usage
 
-The `useForm` hook is necessary to create forms. It takes in `formData` and `formOptions` as parameters and returns an object containing the `form state` and the form actions.
-
-```jsx
-const {
-  form, // Form Data
-  touches, isTouched, // Form touches
-  errors, isValid, // Form validation
-  context, // Context
-  triggerChange, reset, merge,
-  handleSubmit, field,
-  onChange, getValue, changeValue, changeValue, 
-  resetTouch,
-  getErrors, setError, hasError, 
-  watch,
-  undo, redo
-} = useForm(formData, formOptions);
-
-```
-
-Note: If you are using the `@resourge/schema` package or your own schema, you don't need to perform any additional configuration for error setup.
-
-Here's an example of setting up error conversion using a different schema:
-
-
-```jsx
-import { setDefaultOnError } from '@resourge/react-form';
-import * as yup from 'yup';
-
-setDefaultOnError((errors) => {
-  // Customize errors to fit the model [{ path, errors }]
-  const formErrors = [];
-
-  errors.inner.forEach((error) => {
-    const path = error.path;
-    const message = error.message;
-    formErrors.push({ path, errors: [message] });
-  });
-
-  return formErrors;
-});
-
-// Set up Yup validation
-const schema = yup.object().shape({
-  name: yup.string().required('Name is required'),
-  // Define other form fields and validation rules
-});
-
-
-export default function Form() {
-  const { 
-    isValid,
-    field, 
-    handleSubmit 
-  } = useForm(
-    {
-      name: 'Rimuru' 
-      // Initialize form data based on the schema
-    },
-    {
-      validationSchema: schema
-      // Pass the schema to formOptions
-    }
-  );
-
-  const onSubmit = handleSubmit((form) => {
-    // Handle form submission
-  });
-
-  return (
-    <form onSubmit={onSubmit}>
-      <input {...field('name')} />
-      <span>{isValid ? "Valid" : "Invalid"} Form</span>
-      <button type="submit">Save</button>
-    </form>
-  );
-}
-
-```
 
 ## Quickstart
 
 For a quickstart example, you can follow the code below:
 
 ```jsx
-import React from 'react';
-import { useForm } from '@resourge/react-form';
+import { useForm } from '@resourge/react-form'
 
-export default function Form() {
-  const { 
+function App() {
+  const {
+    form,
+    isTouched,
     isValid,
-    field, 
-    handleSubmit 
-  } = useForm({
-    name: 'Rimuru' 
-  });
-
+    field,
+    handleSubmit
+  } = useForm(
+    {
+      productName: ''
+    },
+    {
+      // Form validation
+      // @resourge/schema recommended use
+      validate: () => []
+    }
+  )
+  
   const onSubmit = handleSubmit((form) => {
-    // Handle form submission
-  });
-
+    console.log('form', form)
+    // Send it to backend
+  })
+  
   return (
-    <form onSubmit={onSubmit}>
-      <input {...field('name')} />
-      <span>{isValid ? "Valid" : "Invalid"} Form</span>
-      <button type="submit">Save</button>
-    </form>
-  );
+    <div>
+      <button 
+        onClick={onSubmit}
+      >
+        Submit
+      </button>
+      <div>
+        <label>
+          Product Name
+        </label>
+        <input { ...field('productName')} />
+      </div>
+    </div>
+  )
 }
-
 ```
 
 **Note: The usage of `<form></form>` as a wrapper is optional.**

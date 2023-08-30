@@ -1,14 +1,45 @@
 ---
-title: 'Methods'
+title: 'Form Actions'
 ---
 
-All the methods we provide to create forms.
+```tsx
+// object
+const {
+  form,
+  touches, isTouched,
+  errors, isValid,
+  context,
+
+  field, getValue,
+
+  triggerChange, reset, onChange, changeValue, 
+  
+  handleSubmit,
+
+  getErrors, hasError, setError,
+
+  watch,
+  
+  resetTouch,
+  
+  updateController
+} = useForm( ... )
+```
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| **form** | `object \| class` | [`formData`](#form-data) |
+| **touches** | `{ [form path]: boolean }` | Form touches (ex: { 'user.name': true }) |
+| **isTouched** | `boolean` | Form touches state by default is false if `touches` are undefined or an empty object |
+| **errors** | `{ [form path]: [path error messages] }` | Depends if `useForm` `validate` is set. (ex: { 'user.name': ['Name is required'] }) |
+| **isValid** | `boolean` | Form state by default is false if `errors` are undefined or an empty object |
+| **context** | `object` | Context, mainly for use in `FormProvider` |
 
 ## field
 
-Method to connect the form element to the key by providing native attributes like `onChange`, `name`, etc.
+Method to connect the form element to the key by providing native attributes like `onChange`, `name`, etc
 
-```javascript
+```tsx
 const {
   field
 } = useForm(
@@ -19,38 +50,217 @@ const {
 
 <input {...field('name')} />
 
-/// For validating when changing the value without triggering the submit to get the error validation
-<input {...field('name', { validate: true })} />
+<input 
+  { ...field('name', { 
+      blur: false,
+      readOnly: false,
+      filterKeysError: () => false,
+      forceValidation: false,
+      onChange: () => {},
+      triggerTouched: true,
+      validate: true
+    })
+  } 
+/>
 ```
 
-## triggerChange
+#### Field options
 
-Method to make multiple changes in one render.
+_Note: Field options are not mandatory or necessary, they are optional_
 
-```javascript
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **blur** | `boolean` | false | Turns the field from a onChange to onBlur |
+| **filterKeysError** | `(key: string) => boolean` | undefined | Method to make sure some keys are not triggering errors |
+| **forceValidation** | `boolean` | false | Forces form validation regardless of conditions |
+| **onChange** | `(value: Value) => any` | undefined | Changes the value on change. |
+| **readOnly** | `boolean` | false | Turns the field from a onChange to readonly |
+| **triggerTouched** | `boolean` | true | If `false` will not check `touches` and not call `onTouch` from options |
+| **validate** | `boolean` | true | Validates form if new form values are different from previous form values |
+
+## getValue
+
+Return the value for the matched key
+
+```tsx
 const {
-  triggerChange
+  getValue
 } = useForm(
   {
     name: 'Rimuru'
   }
 )
 
+getValue('name') /// Rimuru
+```
+
+## triggerChange
+
+Method to make multiple changes in one render
+
+```tsx
+const {
+  triggerChange
+} = useForm(
+  ...
+)
+
 triggerChange((form) => {
-  form.name = 'Rimuru_edited';
+  form.name = 'Rimuru';
+  form.age = '39';
+  ...
+})
+
+triggerChange((form) => {}, { 
+  filterKeysError: (key) => false,
+  forceValidation: false,
+  triggerTouched: true,
+  validate: true
 })
 ```
 
+##### Field options
+
+_Note: Field options are not mandatory or necessary, they are optional_
+
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **filterKeysError** | `(key: string) => boolean` | undefined | Method to make sure some keys are not triggering errors |
+| **forceValidation** | `boolean` | false | Forces form validation regardless of conditions |
+| **triggerTouched** | `boolean` | true | If `false` will not check `touches` and not call `onTouch` from options |
+| **validate** | `boolean` | true | Validates form if new form values are different from previous form values |
+
+## reset
+
+Resets form state
+
+```tsx
+const {
+  reset
+} = useForm(
+  {
+    name: 'Rimuru'
+  }
+)
+...
+reset({
+  name: 'Rimuru Tempest'
+})
+
+reset({ ... }, {
+  filterKeysError: (key) => false,
+  forceValidation: false,
+  triggerTouched: true,
+  validate: true,
+  clearTouched: true
+})
+```
+
+##### Field options
+
+_Note: Field options are not mandatory or necessary, they are optional_
+
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **filterKeysError** | `(key: string) => boolean` | undefined | Method to make sure some keys are not triggering errors |
+| **forceValidation** | `boolean` | false | Forces form validation regardless of conditions |
+| **triggerTouched** | `boolean` | true | If `false` will not check `touches` and not call `onTouch` from options |
+| **validate** | `boolean` | true | Validates form if new form values are different from previous form values |
+| **clearTouched** | `boolean` | true | On reset, `touches` will be cleared |
+
+## onChange
+
+Returns a method to change key value
+
+```tsx
+const {
+  onChange
+} = useForm(
+  {
+    name: 'Rimuru'
+  }
+)
+...
+onChange('name')
+
+<input onChange={onChange('name')} />
+
+onChange('name', { 
+  blur: false,
+  readOnly: false,
+  filterKeysError: () => false,
+  forceValidation: false,
+  onChange: () => {},
+  triggerTouched: true,
+  validate: true
+})
+```
+
+##### Field options
+
+_Note: Field options are not mandatory or necessary, they are optional_
+
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **blur** | `boolean` | false | Turns the field from a onChange to onBlur |
+| **filterKeysError** | `(key: string) => boolean` | undefined | Method to make sure some keys are not triggering errors |
+| **forceValidation** | `boolean` | false | Forces form validation regardless of conditions |
+| **onChange** | `(value: Value) => any` | undefined | Changes the value on change. |
+| **readOnly** | `boolean` | false | Turns the field from a onChange to readonly |
+| **triggerTouched** | `boolean` | true | If `false` will not check `touches` and not call `onTouch` from options |
+| **validate** | `boolean` | true | Validates form if new form values are different from previous form values |
+
+## changeValue
+
+Simplified version of `onChange`, without the return method
+
+```tsx
+const {
+  changeValue
+} = useForm(
+  {
+    name: 'Rimuru',
+    age: '40'
+  }
+)
+...
+changeValue('name', 'Rimuru Tempest')
+
+changeValue('name', 'Rimuru Tempest', { 
+  blur: false,
+  readOnly: false,
+  filterKeysError: () => false,
+  forceValidation: false,
+  onChange: () => {},
+  triggerTouched: true,
+  validate: true
+})
+```
+
+##### Field options
+
+_Note: Field options are not mandatory or necessary, they are optional_
+
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **blur** | `boolean` | false | Turns the field from a onChange to onBlur |
+| **filterKeysError** | `(key: string) => boolean` | undefined | Method to make sure some keys are not triggering errors |
+| **forceValidation** | `boolean` | false | Forces form validation regardless of conditions |
+| **onChange** | `(value: Value) => any` | undefined | Changes the value on change. |
+| **readOnly** | `boolean` | false | Turns the field from a onChange to readonly |
+| **triggerTouched** | `boolean` | true | If `false` will not check `touches` and not call `onTouch` from options |
+| **validate** | `boolean` | true | Validates form if new form values are different from previous form values |
+
 ## handleSubmit
 
-Method to handle form submission and prevent the submission if theres errors.
+Method to handle form submission
 
-```javascript
+```tsx
 const onSubmit = handleSubmit((form) => {
   /// Will only be called when form is valid
   /// do something with it
 })
-//
+
 const onSubmit = handleSubmit(
   (form) => {
     /// Will always be called 
@@ -61,127 +271,11 @@ const onSubmit = handleSubmit(
 )
 ```
 
-## Form Data
-
-Form data is the default form values. Can be a simple object or a class (I made it specifically for class support)
-
-Rules:
-
-- Only constrains `Form Data` to an object. Meaning that it's possible to have elements with `moment`, `dayjs`, `class's`, `luxonas`, etc.
-- Cached on the first render (changes will not affect the form data).
-
-Example with plain object
-
-```javascript
-
-// definition of a plain object
-const user = {
-    name: 'Rimuru',
-    age: 39
-}
-
-// usage with an object
-const {
-  ...
-} = useForm(
-  user
-)
-```
-
-Example with Class
-
-```javascript
-// definition of class
-class User {
-  name = 'Rimuru';
-  age = 39
-  
-  get fullName() {
-    return `${this.name} Tempest`
-  }
-}
-
-// usage with a class
-const {
-  ...
-} = useForm(
-  new User()
-)
-```
-
-## watch
-
-Executes methods when "watched key" is touched.
-
-```javascript
-const {
-  watch
-} = useForm(
-  {
-    name: 'Rimuru'
-  }
-)
-...
-// When 'name' is `touched` it will update again with the new name
-// It does not rerender again, its a one time deal for every watch
-// Order is important as well, as it will be executed by order in render
-watch('name', (form) => {
-  form.name = 'Rimuru Tempest';
-})
-```
-
-## setError
-
-Method to set custom errors.
-
-```javascript
-const {
-  setError
-} = useForm(
-  {
-    name: 'Rimuru'
-  }
-)
-...
-setError([
-  {
-    key: 'name',
-    message: 'Beautiful name'
-  }
-])
-```
-
-## hasError
-
-Returns a boolean for the matched key.
-
-```javascript
-const {
-  hasError
-} = useForm(
-  {
-    product: {
-      name: 'Apple',
-      category: {
-        name: 'Food',
-        type: {
-          name: 'Solid',
-          type: 'Vegetal'
-        }
-      }
-    }
-  }
-)
-...
-hasError('product.category') 
-/// Can return (depends on the validation)
-```
-
 ## getErrors
 
-Returns error messages for the matched key.
+Returns error messages for the matched key
 
-```javascript
+```tsx
 const {
   getErrors
 } = useForm(
@@ -196,121 +290,133 @@ const {
         }
       }
     }
-  }
-)
-...
-getErrors('product.category') /// [<<Error Messages>>]
-```
-
-## reset
-
-Resets form state.
-
-```javascript
-const {
-  reset
-} = useForm(
-  {
-    name: 'Rimuru'
-  }
-)
-...
-reset({
-  name: 'Rimuru Tempest'
-})
-
-/// Validates new data, triggers validation
-reset(
-  {
-    name: 'Rimuru Tempest'
   },
   {
-    validate: true
+	validate: () => {
+		// Returned errors are going to be show in getErrors
+		return []
+	}
   }
 )
-```
 
-## merge
+getErrors('product.category') /// [<<Error Messages>>]
+getErrors('product.category.type.name') /// [<<Error Messages>>]
 
-Unlike reset, `merge` will merge a new partial form to the new form.
-
-```javascript
-const {
-  merge
-} = useForm(
-  {
-    name: 'Rimuru',
-    age: '40'
-  }
-)
-...
-merge({
-  age: '39'
+getErrors('product.category.type.name', {
+  includeChildsIntoArray: true,
+  includeKeyInChildErrors: false,
+  onlyOnTouch: true,
+  onlyOnTouchKeys: undefined,
+  strict: true
 })
 ```
 
-## onChange
+#### Field options
 
-Returns a method to change key value.
+_Note: Field options are not mandatory or necessary, they are optional_
 
-```javascript
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **includeChildsIntoArray** | `boolean` | true | Includes the children errors on the array |
+| **includeKeyInChildErrors** | `boolean` | false | Includes `key` in children paths |
+| **onlyOnTouch** | `boolean` | true |  When true only returns if the key was `touched` |
+| **onlyOnTouchKeys** | ` Array<FormKey<T>>` | undefined | Array containing other keys to also validate on touch |
+| **strict** | `boolean` | true | Includes children errors as objects into array. _Note: If `includeChildsIntoArray` is true `strict` will by default be false_ |
+
+## hasError
+
+Returns a boolean for the matched key
+
+```tsx
 const {
-  onChange
+  hasError
+} = useForm(
+  {
+    product: {
+      name: 'Apple',
+      category: {
+        name: 'Food',
+        type: {
+          name: 'Solid',
+          type: 'Vegetal'
+        }
+      }
+    }
+  },
+  {
+	validate: () => {
+		// Returned errors are defined if hasError is true or false
+		return []
+	}
+  }
+)
+
+hasError('product.category') // returns true or false
+hasError('product.category.type.name') // returns true or false
+```
+
+##### Field options
+
+_Note: Field options are not mandatory or necessary, they are optional_
+
+| Name | Type | Default | Description |
+| ---- | ---- | ---- | ----------- |
+| **onlyOnTouch** | `boolean` | true |  When true only returns if the key was `touched` |
+| **onlyOnTouchKeys** | ` Array<FormKey<T>>` | undefined | Array containing other keys to also validate on touch |
+| **strict** | `boolean` | true | Includes children errors to define if is true or false. _Note: If `includeChildsIntoArray` is true `strict` will by default be false_ |
+
+## setError
+
+Method to set custom errors
+
+```tsx
+const {
+  setError
 } = useForm(
   {
     name: 'Rimuru'
   }
 )
-...
-onChange('name')
 
-/// Validates form on change
-onChange('name', { validate: true })
-
-<input onChange={onChange('name')} />
-```
-
-## changeValue
-
-Simplified version of `onChange`, without the return method.
-
-```javascript
-const {
-  changeValue
-} = useForm(
+setError([
   {
-    name: 'Rimuru',
-    age: '40'
+    key: 'name',
+    message: 'Beautiful name'
   }
-)
-...
-changeValue('name', 'Rimuru Tempest')
-
-/// Validates form on change
-changeValue('name', 'Rimuru Tempest', { validate: true })
+])
 ```
 
-## getValue
+## watch
 
-Return the value for the matched key.
+- After all changes are done, it will execute all "watched keys" methods. <br />
+- Watch key, then executes the method to update itself or others values. <br />
+- Watch 'submit' to execute when the form is submitted.
 
-```javascript
+```tsx
 const {
-  changeValue
+  watch
 } = useForm(
   {
     name: 'Rimuru'
   }
 )
-...
-getValue('name') /// Rimuru
+
+// When 'name' is `touched` it will update again with the new name
+// It does not rerender again, its a one time deal for every watch
+// Order is important as well, as it will be executed by order in render
+watch('name', (form) => {
+  form.name = 'Rimuru Tempest';
+})
+// When form is submitted
+watch('submit', (form) => {
+})
 ```
 
 ## resetTouch
 
-Clears touch's for the form.
+Clears touch's
 
-```javascript
+```tsx
 const {
   resetTouch
 } = useForm(
@@ -320,42 +426,16 @@ const {
 resetTouch()
 ```
 
-## resetTouch
+## updateController
 
-Revert last change if available.
+Forces update controllers with key
 
-```javascript
+```tsx
 const {
-  undo
-} = useForm()
-...
-undo()
+  updateController
+} = useForm(
+  ...
+)
+
+updateController("<<Some used in Controller>>")
 ```
-
-## redo
-
-Forward last undo if available.
-
-```javascript
-const {
-  redo
-} = useForm()
-...
-redo()
-```
-
-## All actions
-
-`useForm` returns `State` and `Actions`.
-
-All actions available on `useForm`:
-
-| Name | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| **form** | `object` | [`formData`](#form-data) | Form data |
-| **errors** | `{ [form path]: [path error messages] }` | undefined | Depends if `useForm` `validate` is set. (ex: { 'user.name': ['Name is required'] }) |
-| **touches** | `{ [form path]: boolean }` | {} | Form touches (ex: { 'user.name': true }) |
-| **isTouched** | `boolean` | false | Form touches state by default is false if `touches` are undefined or an empty object |
-| **context** | `object` | [Form State](#form-state) | Context, mainly for use in `FormProvider` |
-| **formState** | `object` | `object` | Virtual Form Data, that provides a virtual representation of the form data to individually find errors/isTouched/isValid on each key (includes deep keys) |
-

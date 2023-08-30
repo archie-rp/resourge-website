@@ -4,23 +4,25 @@ title: 'Controller'
 
 For more complex and deep forms, where render's can impact performance 
 (like list's with multiple elements) `Controller` serves to minimize 
-the impact a render can have on react, by only updating children if key `name`
-is `touched`. 
+the impact a render can have on react, by only updating children if prop `name`
+is `touched` by the form. 
+
+_Note: Is mandatory to use useController inside components inside a Controller. Serves to maintain performance benefits._
 
 ```jsx
 import React from 'react';
-import { Controller, useFormField, useForm } from '@resourge/react-form'
+import { Controller, useController, useForm } from '@resourge/react-form'
 
 function CustomElement({ value }: { value: number }) {
   const { 
-    field
+    onChange
   } = useController()
 
   return (
     <div>
       { value } <button
         onClick={() => {
-          field.onChange && field.onChange(Math.random())
+          onChange && onChange(Math.random())
         }}
       >
         Update with random value
