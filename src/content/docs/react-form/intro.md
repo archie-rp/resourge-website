@@ -29,9 +29,9 @@ npm install @resourge/react-form --save
 
 
 
-## Quickstart
+## Example
 
-For a quickstart example, you can follow the code below:
+For a example, you can follow the code below:
 
 ```jsx
 import { useForm } from '@resourge/react-form'
