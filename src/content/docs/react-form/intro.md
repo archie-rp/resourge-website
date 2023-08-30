@@ -2,16 +2,12 @@
 title: "Quick Start"
 ---
 
-# React-Form
-
 `react-form` is a simple and basic controlled hook form. Aiming to create forms with minimal effort.
-
-Visit our website [resourge-react-form.netlify.app](https://resourge-react-form.netlify.app)
 
 ## Features
 
 - Controlled form.
-- Possibility of using `class` as default form data (see more [Form Data](#form-data)).
+- Possibility of using `class` as default form data (see more [`Default Values`](https://resourge.vercel.app/react-form/default-values)).
 - No native validation. The entire validation is up to the developer.
 - Simple to use with existing HTML form inputs and 3rd-party UI libraries.
 - Build with typescript.
