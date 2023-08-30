@@ -54,4 +54,5 @@ export const useUserModel = (model?: UserType) => {
 
 In the form component when you trigger the `handlerSubmit` function will validate the form with the schema.
 Preventing to submit the form in case theres errors in the form.
-We can read the errors by using <a href="/docs/api/Form%20actions#geterrors">Errors</a>
+
+We can read the errors by using [`getErrors`](/react-form/actions#geterrors)
