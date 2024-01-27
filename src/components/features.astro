@@ -17,45 +17,62 @@ const features: Feature[] = [
   {
     title: "Schemas",
     description:
-      "Simplify the validation of complex data structures with nested schemas and custom rules.",
+      "Simplify data validation with nested schemas and custom rules.",
     href: "/schema/intro",
   },
   {
     title: "Translations",
     description:
-      "Create multilingual applications easily with a simple API and a way to handle translation keys.",
-      href: "/translations/intro",
+      "Create multilingual applications with a simple API and translation key handling.",
+    href: "/translations/intro",
   },
   {
     title: "React Router",
     description:
-      "Client side routing system that allows your app to update the url without making another request for another HTML from the server.",
-      href: "/react-router/intro",
+      "Enable client-side routing in your app without server requests.",
+    href: "/react-router/intro",
   },
   {
     title: "React Hook Table",
     description:
-      "Hook with a set of tools to help to control a table.",
-      href: "/react-hook-table/intro",
+      "Control tables easily with a set of React hooks.",
+    href: "/react-hook-table/intro",
   },
   {
     title: "React Search Params",
     description:
-      "Hook with a set of tools to control current url.",
-      href: "/react-search-params/intro",
+      "Manage current URL parameters with a set of React hooks.",
+    href: "/react-search-params/intro",
   },
   {
     title: "Fetch",
     description:
-      "Fetch data in your React application with a simpler Service, while still providing useful features like caching and retrying.",
-      href: "/fetch/intro",
+      "Fetch data in your React app with a simpler Service, including caching and retrying.",
+    href: "/fetch/intro",
+  }
+];
+
+type Collaborator = {
+  name: string;
+  github: string;
+  image: string;
+  role: string;
+};
+
+const collaborators: Collaborator[] = [
+  {
+    name: "José Oliveira",
+    github: "https://github.com/josesilvaoliveira",
+    image: "https://avatars.githubusercontent.com/u/103932528?v=4",
+    role: "Creator/Lead Developer",
   },
-  /* {
-    title: "JSExcel",
-    description:
-      "Read and write Excel files in the browser with a simple API, making it easy to integrate Excel functionality into your web application",
-      href: "/jsexcel/intro",
-  },*/
+  {
+    name: "Rafael Pinto",
+    github: "https://github.com/archie-rp",
+    image: "https://avatars.githubusercontent.com/u/5406135?v=4",
+    role: "Developer/Maintainer",
+  },
+  // Add more collaborators here
 ];
 ---
 
@@ -76,18 +93,19 @@ const features: Feature[] = [
 </div>
 
 <div class="md:mt-0">
-  <h2 class="text-3xl lg:text-5xl font-bold lg:tracking-tight">Typescript</h2>
-  <p class="text-lg mt-4 text-slate-600">
-    Each of these libraries is fully typed with TypeScript, providing an added
-    level of type safety to your applications.
-  </p>
-  <p class="text-lg mt-1 text-slate-600">
-    Our focus on plain JavaScript means that our libraries can be easily adapted
-    to work with other frameworks or libraries, without any extra configuration.
-  </p>
-  <p class="text-lg mt-1 text-slate-600">
-    Whether you're building a new application from scratch or adding
-    functionality to an existing project, Resourge's TypeScript libraries make
-    development faster, easier, and more reliable.
-  </p>
+  <h2 class="text-2xl font-semibold">Collaborators</h2>
+  
+  <div class="grid grid-cols-2 gap-2 mt-4">
+    {
+      collaborators.map((collaborator) => (
+        <div class="flex flex-col items-center">
+          <img src={collaborator.image} alt={collaborator.name} class="w-24 h-24 rounded-full mb-2" />
+          <span>{collaborator.name}</span>
+          <span class="text-sm font-semibold">{collaborator.role}</span>
+          <a href={collaborator.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      ))
+    }
+  </div>
 </div>
+
