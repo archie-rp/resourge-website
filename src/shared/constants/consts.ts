@@ -19,7 +19,8 @@ export const Libraries = {
 	Table: 'react-hook-table',
 	ReactSearchParams: 'react-search-params',
 	Translations: 'translations',
-	Fetch: 'fetch'
+	Fetch: 'fetch',
+	Vue3HookForm: 'vue3-hook-form'
 } as const;
 export const LibrariesValues = Object.values(Libraries);
 
@@ -119,6 +120,14 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'useTranslation', link: 'translations/hook' },
 			{ text: 'Typescript', link: 'translations/typescript' },
 			{ text: 'Plugin Vite', link: 'translations/plugin' },
+		],
+	},
+	'vue3-hook-form': {
+		'Guide': [
+			{ text: 'Get Started', link: 'vue3-hook-form/intro' },
+		],
+		'Documentation': [
+			{ text: 'Methods', link: 'vue3-hook-form/methods' },
 		],
 	},
 	'/': {}
