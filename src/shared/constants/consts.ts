@@ -14,13 +14,13 @@ export const OPEN_GRAPH = {
 export const Libraries = {
 	HomePage: '/',
 	ReactForm: 'react-form',
+	Vue3HookForm: 'vue3-hook-form',
 	Schema: 'schema',
 	Router: 'react-router',
 	Table: 'react-hook-table',
 	ReactSearchParams: 'react-search-params',
 	Translations: 'translations',
 	Fetch: 'fetch',
-	Vue3HookForm: 'vue3-hook-form'
 } as const;
 export const LibrariesValues = Object.values(Libraries);
 
@@ -56,6 +56,14 @@ export const SIDEBAR: Sidebar = {
 		'Try now': [
 			{ text: 'Playground', link: 'react-form/playground' }
 		]
+	},
+	'vue3-hook-form': {
+		'Guide': [
+			{ text: 'Get Started', link: 'vue3-hook-form/intro' },
+		],
+		'Documentation': [
+			{ text: 'Methods', link: 'vue3-hook-form/methods' },
+		],
 	},
 	'schema': {
 		'Guide': [
@@ -120,14 +128,6 @@ export const SIDEBAR: Sidebar = {
 			{ text: 'useTranslation', link: 'translations/hook' },
 			{ text: 'Typescript', link: 'translations/typescript' },
 			{ text: 'Plugin Vite', link: 'translations/plugin' },
-		],
-	},
-	'vue3-hook-form': {
-		'Guide': [
-			{ text: 'Get Started', link: 'vue3-hook-form/intro' },
-		],
-		'Documentation': [
-			{ text: 'Methods', link: 'vue3-hook-form/methods' },
 		],
 	},
 	'/': {}
