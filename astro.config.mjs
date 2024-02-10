@@ -7,7 +7,7 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.resourge.vercel.app",
+  site: "https://astroship.web3templates.com",
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
