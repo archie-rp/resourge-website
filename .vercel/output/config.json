@@ -20,23 +20,11 @@
 			"dest": "render"
 		},
 		{
-			"src": "^\\/docs(?:\\/(.*?))?\\/?$",
+			"src": "^\\/$",
 			"dest": "render"
 		},
 		{
 			"src": "^\\/faq\\/?$",
-			"dest": "render"
-		},
-		{
-			"src": "^\\/guides\\/?$",
-			"dest": "render"
-		},
-		{
-			"src": "^\\/guides(?:\\/(.*?))?\\/?$",
-			"dest": "render"
-		},
-		{
-			"src": "^\\/$",
 			"dest": "render"
 		},
 		{
