@@ -1,23 +1,26 @@
-import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import preact from '@astrojs/preact';
-import react from '@astrojs/react';
-
-import vercel from "@astrojs/vercel/serverless";
+import tailwind from "@astrojs/tailwind";
+import { defineConfig } from "astro/config";
+import vercel from '@astrojs/vercel/static';
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://astroship.web3templates.com",
-  integrations: [tailwind(), image({
-    serviceEntryPoint: "@astrojs/image/sharp"
-  }), mdx(), sitemap(),
-  // Enable Preact to support Preact JSX components.
-  preact(),
-  // Enable React for the Algolia search component.
-  react()],
-  output: "server",
-  adapter: vercel()
+  site: "https://astro-nomy.vercel.app",
+  integrations: [
+    mdx({
+      syntaxHighlight: 'shiki',
+      shikiConfig: { theme: 'github-dark-dimmed' },
+      gfm: true,
+    }),
+    sitemap(),
+    react(),
+    tailwind({
+      applyBaseStyles: false,
+    }),
+  ],
+  adapter: vercel({
+    analytics: true,
+  }),
 });

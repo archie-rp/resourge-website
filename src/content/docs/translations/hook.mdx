@@ -1,0 +1,112 @@
+---
+title: "useTranslation"
+description: "useTranslation"
+---
+
+## Overview
+
+The `useTranslation` hook provided by the `@resourge/translations` library offers various functionalities to simplify translation management in your Vue.js or React applications. This hook enables you to access translations, change the current language, and retrieve information about the available languages.
+
+## Usage
+
+To use the `useTranslation` hook, import it from the configuration file created in the setup:
+
+```javascript
+import { useTranslation } from './translations';
+```
+
+The useTranslation hook returns an object with the following properties and functions:
+
+## T: Translation Function
+
+The `T` function is used to display translations in your components. It takes a translation key as an argument and returns the corresponding translation value.
+
+```jsx
+import { useTranslation } from './translations';
+
+export function MyComponent() {
+  const { T } = useTranslation();
+
+  return <div>{T.global.hello}</div>; // Display the translation value
+}
+
+```
+
+## K: Translation Keys Object
+
+The `K` object represents all the translation keys available in your application. It provides an easy way to reference translation keys while preventing mistakes in key names. Use the `K` object in conjunction with the `t` function to access translations.
+
+```jsx
+import { useTranslation } from './translations';
+
+export function MyComponent() {
+  const { K, t } = useTranslation();
+
+  const greetingKey = K.global.hello; // Access the translation key
+
+  return <div>{t(greetingKey)}</div>; // Access the translation using the key
+}
+
+```
+
+## changeLanguage: Change Current Language
+
+The `changeLanguage` function is used to dynamically change the current language of your application. It takes a language code as an argument and updates the language accordingly.
+
+```jsx
+import { useTranslation } from './translations';
+
+export function MyComponent() {
+  const { changeLanguage, language } = useTranslation();
+
+  const handleChangeLanguage = (newLanguage) => {
+    changeLanguage(newLanguage);
+  };
+
+  return (
+    <div>
+      <div>Current Language: {language}</div>
+      <button onClick={() => handleChangeLanguage('es')}>Change Language to Spanish</button>
+    </div>
+  );
+}
+
+```
+
+## language: Current Language
+
+The `language` property represents the current language of your application. It provides the `language code` as a string.
+
+```jsx
+import { useTranslation } from './translations';
+
+export function MyComponent() {
+  const { language } = useTranslation();
+
+  return <div>Current Language: {language}</div>;
+}
+
+```
+
+## languages: Supported Languages Array
+
+The `languages` property is an array of strings that represents all the languages supported in your application.
+
+```jsx
+import { useTranslation } from './translations';
+
+export function MyComponent() {
+  const { languages } = useTranslation();
+
+  return (
+    <div>
+      <div>Supported Languages:</div>
+      <ul>
+        {languages.map((lang) => (
+          <li key={lang}>{lang}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```

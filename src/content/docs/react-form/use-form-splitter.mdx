@@ -1,0 +1,106 @@
+---
+title: "useFormSplitter"
+description: "Hook to create a sub-form."
+---
+
+Hook to create a sub-form. Serves to basically create a sub form for the specific "formFieldKey", where all validations, forms and methods will be specific to the "formFieldKey" selected. (Works basically like a specific useForm for that "formFieldKey")
+
+
+```jsx
+import React from 'react';
+import { useFormSplitter, useForm, Controller } from '@resourge/react-form'
+
+function CustomElement({ index, value }: { index, value: number }) {
+  const { 
+	form, // Will only be related to the `list[${index}]`
+	errors, // Will only be related to the `list[${index}]`
+	isValid, // Will only be related to the `list[${index}]`
+	isTouched, // Will only be related to the `list[${index}]`
+	handleSubmit // Will only be related to the `list[${index}]`, meaning it will only trigger if `list[${index}]` is valid
+
+	// When used inside a Controller component, its not necessary to add a key
+  } = useFormSplitter()
+  // otherwise its necessary to add a key
+  // } = useFormSplitter(`list[${index}]`)
+
+  return (
+	<table>
+	  <tbody>
+        <tr>
+          <td>
+            Form:
+          </td>
+          <td>
+            { JSON.stringify(form, null, 4) }
+          </td>
+		</tr>
+		<tr>
+          <td>
+            Errors:
+          </td>
+          <td>
+            { JSON.stringify(errors, null, 4) }
+          </td>
+		</tr>
+		<tr>
+          <td>
+            isValid:
+          </td>
+          <td>
+            { isValid.toString() }
+          </td>
+		</tr>
+		<tr>
+          <td>
+            isTouched:
+          </td>
+          <td>
+            { isTouched.toString() }
+          </td>
+		</tr>
+		<tr>
+          <td>
+            Submit:
+          </td>
+          <td>
+            <button 
+              onClick={
+                handleSubmit((form) => {
+                  // console.log('KeyName, form', KeyName, form)
+                })
+              }
+            >
+              Submit
+            </button>
+          </td>
+        </tr>
+	  </tbody>
+	</table>
+  )
+}
+
+export function App() {
+  const {
+    context,
+    form
+  } = useForm({
+    list: Array.from({ length: 1000 }).map((_, index) => index + 1)
+  })
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {
+        form.list.map((value, index) => (
+          <Controller
+            key={`${index}`}
+            name={`list[${index}]`}
+            context={context}
+          >
+            <CustomElement value={value} />
+          </Controller>
+        ))
+      }
+    </div>
+  )
+}
+```

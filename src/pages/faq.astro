@@ -1,0 +1,30 @@
+---
+import FaqSection from "@/components/faq-section";
+import MainLayout from "@/layouts/main-layout.astro";
+---
+
+<MainLayout
+  title="FAQ"
+  description="Frequently Asked Questions"
+  mainClass="min-h-screen container max-w-screen-md py-10"
+>
+  <section>
+    <div class="space-y-6 text-center mb-14">
+      <h1 class="font-heading text-4xl text-center">
+        Frequently Asked Questions
+      </h1>
+      <div class="text-muted-foreground text-md">
+        Welcome to the Resourge FAQ section. Explore our comprehensive FAQ to
+        find quick answers to common inquiries about our innovative web
+        development tools. 
+        
+      </div>
+      <div class="text-muted-foreground text-md">
+        If you need further assistance or have specific
+        questions, don't hesitate to contact our support team for personalized
+        help.
+      </div>
+    </div>
+    <FaqSection client:load />
+  </section>
+</MainLayout>

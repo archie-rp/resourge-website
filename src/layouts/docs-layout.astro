@@ -1,0 +1,68 @@
+---
+import Footer from "@/components/layout/footer.astro";
+import Header from "@/components/layout/header.astro";
+import { SheetMobileNav } from "@/components/layout/sheet-mobile-nav";
+import { MainNavigationMenu } from "@/components/main-navigation-menu";
+import { buttonVariants } from "@/components/ui/button";
+import { docsConfig } from "@/config/docs";
+import { navMenuConfig } from "@/config/nav-menu";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import Icon from "astro-icon";
+import BaseLayout from "./base-layout.astro";
+
+type Props = {
+  title: string;
+  description: string;
+};
+
+const { title, description } = Astro.props;
+const currentPage = Astro.url.pathname;
+
+const githubLink = siteConfig.links.github;
+
+const packageGithubLink = currentPage.includes("docs")
+  ? `${githubLink}${currentPage.split("/")[2]}`
+  : githubLink;
+
+const nameGithub = currentPage.includes("docs")
+  ? `${currentPage.split("/")[2].replaceAll("-", " ")}`
+  : "Resourge";
+---
+
+<BaseLayout title={title} description={description}>
+  <Header className="border-b">
+    <!-- if use Navigation Menu on desktop -->
+    <MainNavigationMenu slot="left-header" client:load />
+    <SheetMobileNav
+      mainNavItems={[...navMenuConfig.links]}
+      sidebarNavItems={[...navMenuConfig.packagesNav, ...docsConfig.sidebarNav]}
+      slot="mobile-nav-header"
+      client:load
+    />
+
+    <nav slot="right-header" >
+      <div class="flex gap-2 items-inherit items-center">
+        <a href={packageGithubLink} target="_blank" rel="noreferrer">
+          <Icon name="mdi:github" className="size-8" />
+          <span class="sr-only">GitHub</span>
+        </a>
+        <a
+          href={packageGithubLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            "px-4 capitalize",
+          )}
+        >
+          {nameGithub}
+        </a>
+      </div>
+    </nav>
+  </Header>
+
+  <slot />
+
+  <Footer className="border-t" />
+</BaseLayout>

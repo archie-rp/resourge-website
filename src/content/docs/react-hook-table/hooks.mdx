@@ -1,0 +1,161 @@
+---
+title: "Hooks"
+description: "Hooks"
+---
+
+### changeItemsPerPage
+
+Changes items per page
+
+```jsx
+const [
+  ...
+  {
+    changeItemsPerPage
+  }
+] = useFetchPagination(...)
+```
+
+### changePage
+
+Changes current page
+
+```jsx
+const [
+  ...
+  {
+    changePage
+  }
+] = useFetchPagination(...)
+```
+
+### changePagination
+
+Changes both current page and items per page
+
+```jsx
+const [
+  ...
+  {
+	changePagination
+  }
+] = useFetchPagination(...)
+```
+
+### getPaginationHref
+
+Builds href for use on navigation. (usually used with pagination component)
+
+```jsx
+const [
+  ...
+  {
+    getPaginationHref
+  }
+] = useFetchPagination(...)
+```
+
+### getPathWithSearch
+
+Gets new path with search params
+
+```jsx
+const [
+  ...
+  {
+	getPathWithSearch
+  }
+] = useFetchPagination(...)
+```
+
+### reForceUpdate
+
+Forces a table refresh
+
+```jsx
+const [
+  ...
+  {
+	reForceUpdate
+  }
+] = useFetchPagination(...)
+```
+
+### resetPagination
+
+Resets pagination to initial/default values
+
+```jsx
+const [
+  ...
+  {
+    resetPagination
+  }
+] = useFetchPagination(...)
+```
+
+### resetSearchParams
+
+Reset search params to initial/default values.
+
+```jsx
+const [
+  ...
+  {
+    resetSearchParams
+  }
+] = useFetchPagination(...)
+```
+
+### setFilter
+
+Method to updates filters.
+
+```jsx
+const [
+  ...
+  {
+	setFilter
+  }
+] = useFetchPagination(...)
+```
+
+### setTotalItems
+
+Sets number of total items.
+_Note: Doesn't render the component_
+
+```jsx
+const [
+  ...
+  {
+    setTotalItems
+  }
+] = useFetchPagination(...)
+```
+
+### setSearchParams
+
+Updates search params
+
+```jsx
+const [
+  ...
+  {
+    setSearchParams
+  }
+] = useFetchPagination(...)
+```
+
+### sortTable
+
+Changes which column to order asc/desc.
+
+```jsx
+const [
+  ...
+  {
+    sortTable
+  }
+] = useFetchPagination(...)
+```
