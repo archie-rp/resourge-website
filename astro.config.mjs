@@ -7,7 +7,7 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://resourge.vercel.app",
+  site: "https://www.resourge.vercel.app",
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
@@ -21,5 +21,10 @@ export default defineConfig({
     }),
   ],
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true
+    },
+    maxDuration: 8
+  }),
 });
