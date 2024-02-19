@@ -1,6 +1,6 @@
 ---
 title: 'Controller'
-description: 'Controller'
+description: 'Controller is a component that serves to connect a form with a custom component'
 ---
 
 For more complex and deep forms, where render's can impact performance 
@@ -8,7 +8,9 @@ For more complex and deep forms, where render's can impact performance
 the impact a render can have on react, by only updating children if prop `name`
 is `touched` by the form. 
 
-_Note: Is mandatory to use useController inside components inside a Controller. Serves to maintain performance benefits._
+<Callout icon="💡" type="info">
+Note: Is mandatory to use `useController` inside components inside a Controller. Serves to maintain performance benefits. 
+</Callout>
 
 ```jsx
 import React from 'react';

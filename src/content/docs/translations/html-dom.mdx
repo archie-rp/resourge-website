@@ -1,0 +1,117 @@
+---
+title: "Html tags in translation"
+description: "How to use html tags in translation React"
+---
+
+# How to use html tags in translation React
+
+To use html tags in translation, you can use the `Trans` component from `@resourge/react-translations` library.
+
+## Add html tags in translation
+
+```tsx
+import { SetupVueTranslations, languageLocalStorage, navigatorLanguageDetector } from '@resourge/react-translations';
+
+const { TranslationInstance, useTranslation } = SetupReactTranslations({
+  langs: ['pt', 'en', 'es'],
+  defaultLanguage: 'pt',
+  plugins: [
+    navigatorLanguageDetector({
+      onLanguage: (language) => language.split('-')[0]
+    }),
+    languageLocalStorage()
+  ],
+  translations: {
+    global: {
+      hello: { pt: 'Olá <b>{{name}}</b>', en: 'Hello <b>{{name}}</b>', es: 'Hola <b>{{name}}</b>' },
+      subtitle: { pt: 'Bem-vindo ao <i>Resourge</i>', en: 'Welcome to <i>Resourge</i>', es: 'Bienvenido a <i>Resourge</i>' }
+    }
+  }
+});
+
+export { TranslationInstance, useTranslation };
+```
+## Example Component React
+
+```tsx
+import { Trans } from '@resourge/react-translations';
+import { useTranslation } from '../shared/Translations'; //  Replace with your actual implementation
+
+
+const MyComponent = () => {
+    
+  const { T } = useTranslation();
+  
+  return (
+    <div>
+      <Trans
+        components={{ b: <b /> }}
+        message={T.global.hello({ name: 'John' })}
+       />
+      <Trans
+        components={{ i: <i /> }}
+        message={T.global.subtitle}
+      />
+    </div>
+  );
+}
+
+```
+
+In this example, we are using the `Trans` component to render the translations with the html tags.
+The `components` prop is used to map the html tags to the actual html tags that will be rendered.
+Example: `{ b: <b /> }` will render the `b` tag as `<b>`.
+
+
+# How to use html tags in translation Vue
+
+To use html tags in translation, you can use the `Trans` component from `@resourge/vue-translations` library.
+
+## Add html tags in translation
+
+```tsx
+import { SetupVueTranslations, languageLocalStorage, navigatorLanguageDetector } from '@resourge/vue-translations';
+
+const { TranslationInstance, useTranslation } = SetupVueTranslations({
+  langs: ['pt', 'en', 'es'],
+  defaultLanguage: 'pt',
+  plugins: [
+    navigatorLanguageDetector({
+      onLanguage: (language) => language.split('-')[0]
+    }),
+    languageLocalStorage()
+  ],
+  translations: {
+    global: {
+      hello: { pt: 'Olá <b>{{name}}</b>', en: 'Hello <b>{{name}}</b>', es: 'Hola <b>{{name}}</b>' },
+      subtitle: { pt: 'Bem-vindo ao <i>Resourge</i>', en: 'Welcome to <i>Resourge</i>', es: 'Bienvenido a <i>Resourge</i>' }
+    }
+  }
+});
+
+export { TranslationInstance, useTranslation };
+```
+
+## Example Component Vue
+
+```vue
+<script lang="ts" setup>
+
+import { useTranslation } from '../shared/Translations';
+import Trans from '@/shared/translations/components/Trans.vue';
+
+const { T } = useTranslation()
+
+</script>
+
+<template>
+    <Trans
+        :components="{ b: <b /> }"
+        :message"T.global.hello({ name: 'John' })"
+       />
+      <Trans
+        :components="{ i: <i /> }"
+        :message"T.global.subtitle"
+      />
+</template>
+```

@@ -11,8 +11,9 @@ export default defineConfig({
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
-      shikiConfig: { theme: 'github-dark-dimmed' },
+      shikiConfig: { theme: 'rose-pine-moon' },
       gfm: true,
+      optimize: true,
     }),
     sitemap(),
     react(),
