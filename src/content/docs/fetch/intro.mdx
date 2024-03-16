@@ -31,45 +31,47 @@ or NPM:
 npm install @resourge/react-fetch --save
 ```
 
+## React-native
+
+To use in react-native, it requires to use [react-native-url-polyfill](https://www.npmjs.com/package/react-native-url-polyfill)
+
+```sh
+// index.js
+// Add
+import 'react-native-url-polyfill/auto';
+```
+
+
 ## Usage
 
-```jsx
-import React from 'react'
+Example of a simple useFetch fetching posts from jsonplaceholder.
 
-import {
-  useFetch
-} from '@resourge/react-fetch'
+```tsx
+import React from 'react';
+import { useFetch } from '@resourge/react-fetch';
+import HttpService from 'shared/services/http-service';
 
-function FooComponent() {
-  // const [products, fetch, isLoading, error] = useFetch(
-  // or
-  const { data: products, isLoading, error } = useFetch(
-	() => {
-      return // Axios/fetch/HttpService
-	},
-	{
-	  initialValue: []
-	}
-  );
+const App = () => {
+  const { data: posts, loading, error, fetch } = useFetch(
+       async () => await HttpService.get('https://jsonplaceholder.typicode.com/posts'),
+        { initialValue: [] }
+    );
 
-  if ( isLoading ) {
-	return <>Loading...</>
-  }
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Something went wrong</div>;
 
-  if ( error ) {
-	return <>Something went wrong</>
-  }
-  
   return (
-    <ul>
-	  {
-		products.map((val) => (
+    <div>
+      <button onClick={() => fetch()}>Fetch</button>
+      {
+		posts.map((val) => (
 		  <li key={val.id}>{ val.name }</li>
 		))
 	  }
-    </ul>
-  )
-}
+    </div>
+  );
+};
 
-export default App
 ```
+
+

@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "astro": "astro"
+    "astro": "astro",
+    "publish": "astro build && vercel --prod"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.1.1",

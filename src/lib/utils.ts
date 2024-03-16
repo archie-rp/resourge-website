@@ -1,6 +1,7 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { clsx, type ClassValue } from "clsx";
 import { format } from "date-fns";
+import { twMerge } from "tailwind-merge";
+import type { Feature } from "./consts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,4 +23,17 @@ export function extractSegmentURL(path: string) {
 
 export function capitalizer(text: string) {
   return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+export function orderByTitle(features: Feature[]) {
+  return features.sort((a, b) => {
+    // Compare the titles of the features
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
+  });
 }

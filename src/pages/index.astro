@@ -1,64 +1,11 @@
 ---
+import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { siteConfig } from "@/config/site";
 import MainLayout from "@/layouts/main-layout.astro";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
-
-type Feature = {
-  title: string;
-  description: string;
-  href: string;
-};
-
-const features: Feature[] = [
-  {
-    title: "React Form",
-    description:
-      "Build forms easily in React with customizable options and validations.",
-    href: "/docs/react-form/intro",
-  },
-  {
-    title: "Vue 3 Hook Form",
-    description:
-      "Build forms easily in Vue 3 with customizable options and validations.",
-    href: "/docs/vue3-hook-form/intro",
-  },
-  {
-    title: "Schemas",
-    description:
-      "Simplify data validation with nested schemas and custom rules.",
-    href: "/docs/schema/intro",
-  },
-  {
-    title: "Translations",
-    description:
-      "Create multilingual applications with a simple API and translation key handling.",
-    href: "/docs/translations/intro",
-  },
-  {
-    title: "React Router",
-    description:
-      "Enable client-side routing in your app without server requests.",
-    href: "/docs/react-router/intro",
-  },
-  {
-    title: "React Hook Table",
-    description: "Control tables easily with a set of React hooks.",
-    href: "/docs/react-hook-table/intro",
-  },
-  {
-    title: "React Search Params",
-    description: "Manage current URL parameters with a set of React hooks.",
-    href: "/docs/react-search-params/intro",
-  },
-  {
-    title: "Fetch",
-    description:
-      "Fetch data in your React app with a simpler Service, including caching and retrying.",
-    href: "/docs/fetch/intro",
-  },
-];
+import { mainMenuOfLibraries } from "../lib/consts";
 
 type Collaborator = {
   name: string;
@@ -85,7 +32,7 @@ const collaborators: Collaborator[] = [
 ---
 
 <MainLayout title="Resourge">
-  <section class="space-y-6 pb-12 pt-16 lg:py-28">
+  <section class="space-y-6 pb-12 pt-16 lg:py-20">
     <div
       class="container flex max-w-[64rem] flex-col items-center gap-5 text-center"
     >
@@ -117,7 +64,7 @@ const collaborators: Collaborator[] = [
     <div
       class="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center"
     >
-      <h2 class="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
+      <h2 class="font-heading text-2xl leading-[1.1] sm:text-3xl md:text-4xl">
         Packages
       </h2>
     </div>
@@ -125,9 +72,9 @@ const collaborators: Collaborator[] = [
       class="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3"
     >
       {
-        features.map((item) => (
+        mainMenuOfLibraries.map((item) => (
           <div class="relative overflow-hidden rounded-lg border bg-background p-2">
-            <div class="flex h-[180px] flex-col justify-between rounded-md p-5">
+            <div class="flex  flex-col justify-between rounded-md p-5">
               <div class="space-y-2">
                 <h3 class="font-bold">{item.title}</h3>
                 <p class="text-sm text-muted-foreground">{item.description}</p>
@@ -141,6 +88,13 @@ const collaborators: Collaborator[] = [
                 >
                   Get Started
                 </a>
+              </div>
+              <div class="flex gap-2 pt-3">
+                {item.support?.map((support) => (
+                  <Badge variant="secondary" radius={"full"}>
+                    {support}
+                  </Badge>
+                ))}
               </div>
             </div>
           </div>

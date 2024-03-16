@@ -1,0 +1,184 @@
+---
+title: "Hooks"
+description: ""
+---
+
+### useAuthentication
+
+The `useAuthentication` hook provides functionalities for managing user authentication within your Vue application.
+
+#### Usage
+
+```typescript
+import { defineComponent } from 'vue';
+import { useAuthentication } from 'shared/authentication/useAuthentication'; // Replace with the correct path to the useAuthentication hook
+
+export default defineComponent({
+  setup() {
+    const { isAuthenticated, profile, login, logout } = useAuthentication();
+
+    // Use isAuthenticated, profile, login, and logout in your component
+
+    return {
+      isAuthenticated,
+      profile,
+      login,
+      logout
+    };
+  }
+});
+```
+
+#### API
+
+| Property            | Type                                      | Description                                                                                     |
+|---------------------|-------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `isAuthenticated`   | `Readonly<Ref<boolean>>`                  | A reactive boolean ref indicating whether the user is authenticated or not.                    |
+| `profile`           | `Ref<U>`                                  | A reactive ref containing the user profile data.                                                |
+| `login(profile, permissions, token, cookieRef)` | `(profile: U, permissions: P, token: string, cookieRef: string) => void` | Authenticate the user by providing a user profile, permissions, authentication token, and cookie reference. |
+| `logout()`          | `() => void`                              | A function to log the user out of the application. It clears the authentication state and performs any necessary cleanup.                                       |
+
+#### Login
+
+To log a user in, use the `login` function provided by the `useAuthentication` hook. Here's an example of how to log in a user after obtaining user data and authentication token:
+
+```typescript
+import { useAuthentication } from 'shared/authentication/useAuthentication'; // Replace with the correct path to the useAuthentication hook
+import { Profile } from './shared/authentication/user/Profile';
+import { Permissions } from './shared/authentication/user/Permissions';
+
+const { login } = useAuthentication();
+
+// Assuming user data and authentication token are obtained
+const user = { /* User data */ };
+const token = 'example_token';
+const cookieRef = 'example_cookie_ref';
+
+// Logging in the user
+login(new Profile(user), new Permissions(user.roles), token, cookieRef);
+```
+
+#### Logout
+
+To log a user out, simply call the `logout` function provided by the `useAuthentication` hook. Here's an example:
+
+```typescript
+import { useAuthentication } from 'shared/authentication/useAuthentication'; // Replace with the correct path to the useAuthentication hook
+
+const { logout } = useAuthentication();
+
+// Logging out the user
+logout();
+```
+
+
+### usePermissions
+
+The `usePermissions` hook provides functionalities for accessing user permissions within your Vue application.
+
+#### Usage
+
+```typescript
+import { defineComponent } from 'vue';
+import { usePermissions } from 'shared/authentication/usePermissions'; // Replace with the correct path to the usePermissions hook
+
+export default defineComponent({
+  setup() {
+    const permissions = usePermissions();
+
+    // Use permissions in your component
+
+    return {
+      permissions
+    };
+  }
+});
+```
+
+#### API
+
+| Property     | Type   | Description                                              |
+|--------------|--------|----------------------------------------------------------|
+| `permissions`| `P`    | Returns the user permissions as specified by the `P` type parameter. |
+
+#### Example
+
+To access user permissions, use the `usePermissions` hook as follows:
+
+```typescript
+import { usePermissions } from 'shared/authentication/usePermissions'; // Replace with the correct path to the usePermissions hook
+
+const permissions = usePermissions();
+
+// Use permissions in your application
+console.log('User Permissions:', permissions);
+```
+
+
+
+### useAuthenticationStorage
+
+The `useAuthenticationStorage` hook provides functionalities for accessing authentication state and performing authentication actions outside of Vue components.
+
+#### Configuration 
+
+Create a TypeScript file named `useAuthenticationStorage.ts` in your project with the following content:
+
+```typescript
+// useAuthenticationStorage.ts
+
+import { useAuthenticationStorage } from "@resourge/vue3-use-authentication"
+import { SESSION_STORAGE_KEY, VITE_BASE_ENC } from "../constants/Environment"
+import HttpService from "../services/HttpService"
+import Permissions from "./permissions/Permissions"
+import { Profile } from "./user/User"
+
+// when the token is refreshed, set it in the HttpService
+const onRefreshToken = (token: string) => {
+    // Set the token in the HttpService
+    // This is an example of how to set the token in the HttpService
+    HttpService.setToken((config) => {
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`
+        }
+        return config
+    })
+}
+
+const useAuthenticationLocal = () => useAuthenticationStorage<Profile, Permissions>({
+    encrypted: true,
+    localStorageSessionKey: SESSION_STORAGE_KEY,
+    encryptedSecret: VITE_BASE_ENC,
+    onRefreshToken
+})
+
+export default useAuthenticationLocal
+```
+
+#### API
+
+| Property           | Type                               | Description                                                                                                 |
+|--------------------|------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `state`            | `ToRefs<State<U, P>>`             | Reactive state object containing authentication-related data.                                                |
+| `isAuthenticated`  | `boolean`                          | Indicates whether the user is authenticated.                                                                |
+| `login(profile, permissions, token, cookieRef)` | `(profile: U, permissions: P, token: string, cookieRef: string) => void` | Function to authenticate the user by providing a user profile, permissions, authentication token, and cookie reference. |
+| `logout()`         | `() => void`                       | Function to log the user out of the application.                                                            |
+
+#### Example
+
+Example to use the authentication state in your router, import and use `useAuthenticationLocal` as shown in the example below:
+
+```typescript
+import { Router } from 'vue-router';
+import { useAuthenticationLocal } from './useAuthenticationStorage';
+import Routes from './routes'; // Assuming you have a file defining routes
+
+Router.beforeEach(async (to) => {
+    const { isAuthenticated, state: { permissions } } = useAuthenticationLocal();
+
+    // Redirect to home page if accessing login page while authenticated
+    if (to.path === Routes.LOGIN_PAGE.get() && isAuthenticated) {
+        return Routes.HOME_PAGE.get();
+    }
+});
+```
