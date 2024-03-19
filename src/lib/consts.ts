@@ -106,7 +106,7 @@ export const mainMenuOfLibraries: Feature[] = orderByTitle([
 	},
 	{
 		title: "Vue 3 Authentication",
-		description: "System to manage authentication in React applications.",
+		description: "System to manage authentication in Vue 3 applications.",
 		href: "/docs/vue3-use-authentication/intro",
 		support: ["Vue 3"],
 	},
