@@ -1,10 +1,9 @@
 ---
 title: "Quick Start"
-description: "Quick start guide to get you up and running with fetch"
+description: "Get started with react-fetch in just a few steps."
 ---
 
-`react-fetch` provides a set of tools to simplify the request process.
-Provides useFetch, useScrollRestoration, FetchProvider, HttpService, LoadingService and a Loader and GlobalLoader.
+`react-fetch` is a lightweight and straightforward React package designed to simplify data fetching in React applications. It provides an intuitive way to make HTTP requests and manage the state of the data, loading, and errors within your components.
 
 ## Features
 
@@ -44,34 +43,170 @@ import 'react-native-url-polyfill/auto';
 
 ## Usage
 
-Example of a simple useFetch fetching posts from jsonplaceholder.
+To use useFetch, import it into your React component:
 
-```tsx
-import React from 'react';
-import { useFetch } from '@resourge/react-fetch';
-import HttpService from 'shared/services/http-service';
+```jsx
+import React from 'react'
 
-const App = () => {
-  const { data: posts, loading, error, fetch } = useFetch(
-       async () => await HttpService.get('https://jsonplaceholder.typicode.com/posts'),
-        { initialValue: [] }
-    );
+import {
+  useFetch
+} from '@resourge/react-fetch'
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Something went wrong</div>;
+const MyComponent = () => {
+  const {
+    data,
+    error,
+    fetch,
+    isLoading,
+    setFetchState
+  } = useFetch(
+    () => {
+      return Http.get("url");
+    },
+    {
+      initialState: []
+    }
+  );
+
+  // Use data, error, fetch, isLoading, and setFetchState as needed
 
   return (
     <div>
-      <button onClick={() => fetch()}>Fetch</button>
-      {
-		posts.map((val) => (
-		  <li key={val.id}>{ val.name }</li>
-		))
-	  }
+      {/* Your JSX */}
     </div>
   );
 };
+```
+
+### Parameters
+
+useFetch accepts two parameters:
+
+1. `method`: A function that performs the data fetching. It should return a Promise that resolves with the fetched data.
+2. `config`: An optional configuration object with the following properties:
+	- `enable` (boolean, default: true): When `false`, `useEffect` will not trigger fetch.
+	- `loadingService` (string): Specifies a specific `LoadingService` instead of triggering the global one.
+	- `deps` (readonly array): `useEffect` dependencies.
+	- `id` (string): Assign a unique ID to the fetch request.
+	- `initialState` (any): Default data values.
+	- `onEffectEnd` (function): A function that executes only after `useEffect` completes.
+	- `scrollRestoration` (function or array of functions): Functions to restore scroll position.
+
+
+### Examples
+
+Fetch as `useState` and `useEffect`
+
+```javascript
+const {
+  data,
+  error,
+  fetch,
+  isLoading,
+  setFetchState
+} = useFetch(
+  () => {
+    return Http.get("url");
+  },
+  {
+    initialState: []
+  }
+);
 
 ```
 
+Fetch as `useEffect` 
 
+```javascript
+const {
+  error,
+  fetch,
+  isLoading
+} = useFetch(
+  () => {
+    return Http.get("url");
+  },
+  {
+    deps: []
+  }
+);
+```
+
+Only fetch
+
+```javascript
+const {
+  error,
+  fetch,
+  isLoading
+} = useFetch(
+  () => {
+    return Http.get("url");
+  }
+);
+```
+
+## `Loading` Behavior
+
+The `Loading` in `useFetch` can behave either globally or locally, depending on its usage within the useFetch hook.
+
+- `Global Loading`: By default, `loading` will trigger a global loading state if not used within the component where useFetch is called. This means it will update a global loading indicator, potentially affecting other components listening for loading state changes.
+
+- `Local Loading`: If `isLoading` is used within the component's rendering logic, `loading` will only trigger locally. This allows for more granular control over loading states within different parts of the application.
+
+### Examples
+
+In the following example, isLoading is used within the component's rendering logic, causing it to trigger a local loading state:
+
+```javascript
+const {
+  data,
+  error,
+  fetch,
+  isLoading,
+  setFetchState
+} = useFetch(
+  () => {
+    return Http.get("url");
+  },
+  {
+    initialState: []
+  }
+);
+
+return (
+  <div>
+    {isLoading ? (
+      <p>Loading...</p>
+    ) : (
+      <p>Data: {data}</p>
+    )}
+  </div>
+);
+```
+
+To trigger a global loading state, don't use isLoading from usFetch
+
+```javascript
+const {
+  data,
+  error,
+  fetch,
+  setFetchState
+} = useFetch(
+  () => {
+    return Http.get("url");
+  },
+  {
+    initialState: [],
+    // Optional, for triggering a specific loader other than the global
+    // loadingService: 'specificLoadingService' // This will trigger a 
+  }
+);
+```
+
+## Hooks
+
+- `useScrollRestoration`: A hook to restore scroll position after a component unmounts. It accepts an array of functions to restore scroll position.
+- `useFetchOnDependencyUpdate`: A hook to fetch data when a dependency updates. It accepts a function that returns a Promise and an array of dependencies.
+- `useIsOnline`: A hook to check if the user is online. It returns a boolean value.

@@ -11,6 +11,7 @@ export const Libraries = {
   ReactSearchParams: 'react-search-params',
   Translations: 'translations',
   Fetch: 'fetch',
+  HttpService: 'http-service',
   ReactAuthentication: 'react-authentication',
 };
 
@@ -168,8 +169,25 @@ export const fetchSidebar: SidebarNavItem[] = [
     title: "Documentation",
     items: [
       { title: 'Hooks', href: 'hooks' },
-      { title: 'Loader', href: 'loader' },
-      { title: 'Http Service', href: 'http-service' },
+      { title: 'Loader', href: 'loader' }
+    ]
+  }
+];
+
+export const httpServiceSidebar: SidebarNavItem[] = [
+  {
+    title: "Guide",
+    items: [
+      { title: 'Get Started', href: 'intro' },
+    ]
+  },
+  {
+    title: "Documentation",
+    items: [
+      { title: 'Methods', href: 'methods' },
+      { title: 'Interceptors', href: 'interceptors'},
+      { title: 'Configuration', href: 'configuration' },
+      { title: 'Loading Service', href: 'loading-service'}
     ]
   }
 ];

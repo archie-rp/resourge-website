@@ -1,0 +1,48 @@
+---
+title: Configuration
+description: Learn how to configure the BaseHttpService for making requests to a server.
+---
+
+# BaseHttpService
+
+`BaseHttpService` is a main service for making requests to a server. It serves as a simple wrapper around the Fetch API, with added features such as request throttling for `GET` requests and support for file uploads.
+
+## Usage
+
+```typescript
+import { BaseHttpService } from '@resourge/http-service'
+
+const HttpService = new BaseHttpService({
+  baseUrl: 'https://api.example.com',
+  headers: {
+    'Authorization': 'Bearer token123'
+  }
+});
+
+```
+
+
+### Extending BaseHttpService
+
+You can extend `BaseHttpService` to create a specialized service with additional methods or custom configurations:
+
+```typescript
+class CustomHttpService extends BaseHttpService {
+  constructor() {
+    super({
+      baseUrl: 'https://api.example.com',
+      headers: {
+        'Authorization': 'Bearer token123'
+      }
+    });
+  }
+
+  // Add custom methods
+  public customMethod() {
+    // Custom logic here
+  }
+}
+
+const CustomService = new CustomHttpService();
+CustomService.customMethod();
+```

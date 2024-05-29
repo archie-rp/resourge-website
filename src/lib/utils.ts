@@ -26,14 +26,5 @@ export function capitalizer(text: string) {
 }
 
 export function orderByTitle(features: Feature[]) {
-  return features.sort((a, b) => {
-    // Compare the titles of the features
-    if (a.title < b.title) {
-      return -1;
-    }
-    if (a.title > b.title) {
-      return 1;
-    }
-    return 0;
-  });
+  return features.sort((a, b) => a.title.localeCompare(b.title));
 }

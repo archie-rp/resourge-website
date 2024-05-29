@@ -4,7 +4,7 @@ import DocsSidebarNav from "@/components/layout/sidebar-nav.astro";
 import DocsPageHeader from "@/components/page-header.astro";
 import DocsPager from "@/components/pager.astro";
 import { DashboardTableOfContents } from "@/components/toc";
-import { Libraries, docsConfig, fetchSidebar, reactAuthenticationSidebar, reactFormSidebar, reactHookTableSidebar, reactRouterSidebar, reactSearchParamsSidebar, schemaSidebar, translationsSidebar, vue3HookFormSidebar, vue3UseAuthenticationSidebar } from "@/config/docs";
+import { Libraries, docsConfig, fetchSidebar, httpServiceSidebar, reactAuthenticationSidebar, reactFormSidebar, reactHookTableSidebar, reactRouterSidebar, reactSearchParamsSidebar, schemaSidebar, translationsSidebar, vue3HookFormSidebar, vue3UseAuthenticationSidebar } from "@/config/docs";
 import DocsLayout from "@/layouts/docs-layout.astro";
 import { getTableOfContents } from "@/lib/toc";
 import { getCollection, type CollectionEntry } from "astro:content";
@@ -54,6 +54,8 @@ const getLibrarySidebar = (libraryCode: string) => {
       return reactSearchParamsSidebar;
     case Libraries.Fetch:
       return fetchSidebar;
+    case Libraries.HttpService:
+      return httpServiceSidebar;
     case Libraries.Translations:
       return translationsSidebar;
     case Libraries.ReactAuthentication:

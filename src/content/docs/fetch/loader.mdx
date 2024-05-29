@@ -1,72 +1,178 @@
 ---
 title: 'Service Loader'
-description: 'Component with loaderId to trigger loading at the useFetch or LoadingService command. Serves as the global type, where it shows the loading on the entire page. By default loaderId is "".'
+description: 'Component with loaderId to trigger loading at the useFetch or LoadingService command.'
 ---
 
+The `Loader` component is a React component designed to handle loading states within your application. It works in conjunction with `LoadingService` to provide a way for `useFetch` to display loading indicators based on there state.
 
-Component with loaderId to trigger loading at the useFetch or LoadingService command.
-Serves as the global type, where it shows the loading on the entire page.
-By default loaderId is ''.
+## Usage
 
-_Note: Make sure the component is the last one in App/index and it is not inside any style that can influence a absolute position._
+To use the `Loader` component, simply include it in your JSX with the desired `loaderId` and `loadingElement`:
 
-```jsx
-import React from 'react'
+```javascript
+import React from 'react';
+import { Loader } from '@resourge/react-fetch';
 
-import {
-  GlobalLoader
-} from '@resourge/react-fetch'
-
-function Foo() {
-  const [data, fetch, error, isLoading] = useFetch(
-    async () => {
-      return // Axios/fetch/HttpService
-    }, 
-    {
-      initialState: [],
-	  useLoadingService: true // Will trigger GlobalLoader
-    }
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+	  {/* Omitting loaderId */}
+      <Loader loaderId="myLoaderId">
+        <p>This content will be displayed when loading</p>
+      </Loader>
+    </div>
   );
-
-  return (
-	...
-  )
-}
-
-
-function App() {
-  return (
-	<div>
-	  ...// Other Components
-	  <Foo />
-	  <GlobalLoader
-	    // Optional, in case it is undefined it will use GlobalLoader component.
-	    loadingElement={<div>Loading Message</div>}
-	  />
-	</div>
-  )
-}
-
-export default App
+};
 ```
 
-## LoadingService
+In this example, the `Loader` component is used with a specific `loaderId` ("myLoaderId") to trigger loading based on the state of `useFetch`'s with `loadingService` specified (in this case as "myLoaderId"). The default `loadingElement` will be displayed when the loader is in a loading state.
 
-Simple global service to show/hide a ```<Loader />```.
+## Props
 
-```jsx
-import { LoadingService } from '@resourge/react-fetch';
+`loaderId`
+- Type: `string`
+- Default: ''
+- Description: Unique id to distinguish the Loader from other loaders. When not specified, it is treated as a global loader. 
 
-LoadingService.show() // Will trigger GlobalLoader
-LoadingService.show('Loader Id') // To show specific ```<Loader />```
+`loadingElement` or `children`
+- Type: `React.ReactNode`
+- Default: `globalLoading`
+- Description: The loading element to display when the `Loader` is in a loading state. This element will be shown instead of the `children` when `loading` is `true`. <br/>
 
-LoadingService.hide()
-LoadingService.hide('Loader Id') // To hide specific ```<Loader />```
 
-const removeEventListener = LoadingService.addEventListener(
-  'Loader Id',
-  (loading: boolean) => {
-  
-  }
-)
+If you want to use the `Loader` component as the default loader (without a specific `loaderId`), simply omit the `loaderId` prop:
+
+```javascript
+import React from 'react';
+import { Loader } from '@resourge/react-fetch';
+
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+      <Loader>
+        <p>This content will be displayed when loading</p>
+      </Loader>
+    </div>
+  );
+};
 ```
+
+In this case, the `Loader` component will function as a global loader, meaning it will display the `loadingElement` or `children` for all `useFetch` without `loadingService`.
+
+## GlobalLoader
+
+The `GlobalLoader` component is a React component designed to display a global loading indicator on the entire page. It utilizes the `Loader` component and `createPortal` from React to render the loading element as an overlay on top of the page content.
+
+### Props
+
+`loaderId`
+- Type: `string`
+- Default: `''`
+- Description: Unique id to distinguish the GlobalLoader from other loaders. - When not specified, it functions as a global loader covering the entire page.
+
+`style`
+- Type: `React.CSSProperties`
+- Default: `{}`
+- Description: Custom styles to apply to the global loading overlay.
+
+`children`
+- Type: `React.ReactNode`
+- Default: `<GlobalLoading color={globalColor} />`
+- Description: The content to display within the global loading overlay. If not - provided, a default loading indicator will be used.
+
+`color`
+- Type: `string`
+- Default: `globalColor`
+- Description: The color of the loading indicator. Default is `globalColor`.
+
+### Usage
+
+```javascript
+import React from 'react';
+import { GlobalLoader } from '@resourge/react-fetch';
+
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+      <GlobalLoader loaderId="myGlobalLoaderId" />
+      {/* Your content here */}
+    </div>
+  );
+};
+```
+
+### Custom Loading Content
+
+You can also provide custom loading content to the `GlobalLoader`:
+
+```javascript
+import React from 'react';
+import { GlobalLoader } from '@resourge/react-fetch';
+import CustomLoadingComponent from 'path/to/CustomLoadingComponent';
+
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+      <GlobalLoader loaderId="myGlobalLoaderId">
+        <CustomLoadingComponent />
+      </GlobalLoader>
+      {/* Your content here */}
+    </div>
+  );
+};
+```
+
+
+## LoadingFallback
+
+The `LoadingFallback` component is a React component designed to show a loading indicator on mount and hide it on unmount. It utilizes the `LoadingService` from the `@resourge/http-service` package to manage the loading state.
+
+### Usage
+
+```javascript
+import React from 'react';
+import { LoadingFallback } from '@resourge/react-fetch';
+
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+      <LoadingFallback />
+      {/* Your content here */}
+    </div>
+  );
+};
+```
+
+In this example, the `LoadingFallback` component will display a loading indicator when the component mounts, and it will hide the loading indicator when the component unmounts.
+
+## LoadingSuspense
+
+The `LoadingSuspense` component is a React component designed to show a loading indicator when lazy-loaded components are being loaded. It utilizes React's `Suspense` component to handle the loading state and displays a `LoadingFallback` component as a fallback when the lazy components are loading.
+
+### Usage
+
+```javascript
+import React from 'react';
+import { LoadingSuspense } from '@resourge/react-fetch';
+
+const MyLazyComponent = React.lazy(() => import('./MyLazyComponent'));
+
+const MyComponent = () => {
+  return (
+    <div>
+      <h1>My Component</h1>
+      <LoadingSuspense>
+        <MyLazyComponent />
+      </LoadingSuspense>
+      {/* Your content here */}
+    </div>
+  );
+};
+```
+
+In this example, the `LoadingSuspense` component will display the `LoadingFallback` component while `MyLazyComponent` is being loaded lazily.

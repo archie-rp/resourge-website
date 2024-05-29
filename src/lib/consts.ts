@@ -31,6 +31,7 @@ export const Libraries = {
 	ReactSearchParams: 'react-search-params',
 	Translations: 'translations',
 	Fetch: 'fetch',
+	HttpService: 'http-service',
 } as const;
 export const LibrariesValues = Object.values(Libraries);
 
@@ -63,14 +64,14 @@ export const mainMenuOfLibraries: Feature[] = orderByTitle([
 		description:
 			"Simplify data validation with nested schemas and custom rules.",
 		href: "/docs/schema/intro",
-		support: ["React", "React Native", "Vue 3"],
+		support: ["Javascript"],
 	},
 	{
 		title: "Translations",
 		description:
 			"Create multilingual applications with a simple API and translation key handling.",
 		href: "/docs/translations/intro",
-		support: ["React", "Vue 3"],
+		support: ["React", "Vue 3", "React Native"],
 	},
 	{
 		title: "React Router",
@@ -97,6 +98,13 @@ export const mainMenuOfLibraries: Feature[] = orderByTitle([
 			"Fetch data in your React app with a simpler Service, including caching and retrying.",
 		href: "/docs/fetch/intro",
 		support: ["React", "React Native"],
+	},
+	{
+		title: "Http Service",
+		description:
+			"Http service to manage requests in your application with a simple API.",
+		href: "/docs/http-service/intro",
+		support: ["Javascript"],
 	},
 	{
 		title: "React Authentication",

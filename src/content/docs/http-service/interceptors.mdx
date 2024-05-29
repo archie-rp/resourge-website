@@ -1,0 +1,40 @@
+---
+title: Interceptors
+description: Customize request and response configurations with interceptors.
+---
+
+### Custom Interceptors
+
+Interceptors can be used to modify request or response configurations:
+
+```typescript
+HttpService.setToken(config => {
+  // Modify request headers
+  config.headers['Authorization'] = 'New Token';
+  return config;
+});
+
+// Add a request interceptor
+HttpService.interceptors.request.use(
+  response => {
+    // Modify response data or handle it
+    return response;
+  },
+  error => {
+    // Handle errors or modify error responses
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+HttpService.interceptors.response.use(
+  response => {
+    // Modify response data or handle it
+    return response;
+  },
+  error => {
+    // Handle errors or modify error responses
+    return Promise.reject(error);
+  }
+);
+```

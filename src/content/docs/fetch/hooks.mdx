@@ -4,155 +4,143 @@ description: 'Hooks for fetching data'
 ---
 
 
-## useFetch
+## useScrollRestoration
 
-Hook to fetch and set data.
-It will do the loading, error, set data, manually abort request if component is unmounted, and/or triggering other useFetch's.
+`useScrollRestoration` is a custom React hook designed to restore scroll positions when navigating between pages or components. It helps maintain scroll positions and ensuring a seamless user experience.
 
-`useFetch` has 2 modes.
- - When initialState is not set in the config, useEffect is simply a hook that returns a method that trigger's loading, error and the promise.
- - When initialState is set in the config, it will also do everything in the previous mode plus will trigger an useEffect and useOnFocusFetch and will also return `data`.
+### Usage
 
-```jsx
-// Fetch with useEffect 
-// const {
-//	data,
-//    error,
-//    fetch,
-//    isLoading,
-//    noLoadingFetch,
-//    setData
-// } = useFetch(
-// or 
-const [data, fetch, error, isLoading] = useFetch(
-  async () => {
-    return // Axios/fetch/HttpService
-  }, 
-  {
-    initialState: []
-  }
-);
-// Fetch without useEffect, no data is returned or no useEffect will be triggered
-// const {
-//    error,
-//    fetch,
-//    isLoading,
-//    noLoadingFetch
-// } = useFetch(
-// or 
-const [fetch, error, isLoading] = useFetch(
-  async () => {
-    return // Axios/fetch/HttpService
-  }
-);
-```
+```javascript
+import { useScrollRestoration } from '@resourge/react-fetch';
 
-### Options
+const MyComponent = () => {
+  // 'action' must be 'pop' for restoration to work;
+  const [scrollRestore, ref, onScroll] = useScrollRestoration('pop');
 
-| Name | Type | Required | Description |
-| ---- | ---- | -------- | ----------- |
-| **initialState** | `any` | true for useEffect trigger, otherwise no | Default data values. |
-| **deps** | `React.DependencyList` | false | useEffect dependencies. Basically works on useEffect dependencies. _Note: Only with initialState set_ |
-| **enable** | `boolean` | true | When false useEffect will not trigger fetch  |
-| **noEmitError** | `boolean` | false | When false makes it so no error is emitted.  |
-| **silent** | `boolean` | false | Doesn't trigger any Loading. (default: false) |
-| **useLoadingService** | `boolean, string or string[]` | false | Instead of triggering a local loading, this make it so LoadingService does it. [see more](#useLoadingService) |
-| **onWindowFocus** | `boolean` | false | Fetch on window focus (default: true). _Note: Only with initialState set_ |
-| **scrollRestoration** | `method or array of method` | false | Serves to restore scroll position. [see how its done](#scrollRestoration). _Note: Only with initialState set_ |
+  // Use scrollRestore, ref, and onScroll as needed
 
-#### scrollRestoration
-
-```jsx
-import React from 'react'
-
-import {
-  useScrollRestoration,
-  useFetch
-} from '@resourge/react-fetch'
-
-function App() {
-  // <<navigation action type>> is to know if the navigation was pop/push/replace/etc use together with navigation package (@resourge/react-router or react-router)
-  const [scrollRestoration, ref] = useScrollRestoration('<<navigation action type>>');
-  // If ref is not set it will update window scrollbar
-  const { data: products, isLoading, error } = useFetch(
-    async () => {
-      return // Axios/fetch/HttpService
-	},
-	{
-	  initialValue: [],
-	  scrollRestoration: scrollRestoration
-	}
-  );
-
-  if ( isLoading ) {
-	return <>Loading...</>
-  }
-
-  if ( error ) {
-	return <>Something went wrong</>
-  }
-  
   return (
-    <ul ref={ref}>
-	  {
-		products.map((val) => (
-		  <li key={val.id}>{ val.name }</li>
-		))
-	  }
-    </ul>
-  )
-}
+    <div ref={ref} onScroll={onScroll}>
+      {/* Your JSX */}
+    </div>
+  );
+};
 ```
 
-#### useLoadingService
+### Parameters
 
-Instead of triggering a local loading, this make it so LoadingService does it.
-It can be a boolean, string or array of strings. <br />
-When:
-*  true - Will trigger GlobalLoading loading;
-*  string - Will trigger loaderId Loading ("``` <Loader loaderId="">```") 
-*  string[] - Will trigger all loaderId Loading ("``` <Loader loaderId="">```") 
+`useScrollRestoration` accepts two parameters:
 
-## Loader
+1. `action`: A string specifying the action that triggers scroll restoration. Only `'pop'` will restore the scroll position.
+1. `scrollRestorationId`: An optional unique ID categorizing the current component. It defaults to `window.location.pathname` if not provided.
 
-Component show loading at the useFetch or LoadingService command. <br />
-`loadingElement` is optional. When undefined it will use either the GlobalLoader loading component or the default. 
+### Example
 
-```jsx
-import React from 'react'
+```javascript
+import { useScrollRestoration } from '@resourge/react-fetch';
+// or react-router
+import { useAction } from '@resourge/react-router';
 
-import {
-  Loader
-} from '@resourge/react-fetch'
+const MyComponent = () => {
+  // 'action' must be 'pop' for restoration to work;
+  const action = useAction();
+  const [scrollRestoration, ref, onScroll] = useScrollRestoration(action);
 
-function Bar() {
-  const [data, fetch, error, isLoading] = useFetch(
-    async () => {
-      return // Axios/fetch/HttpService
-    }, 
+  // Fetch data and trigger scroll restoration
+  // 'scrollRestoration' is a function to restore scroll position
+  const { data, fetch, error } = useFetch(
+    () => {
+      return HttpService.get("url");
+    },
     {
       initialState: [],
-	  useLoadingService: "Loading one" // Will trigger Loader loaderId="Loading one"
+      scrollRestoration // Pass scrollRestoration to useFetch for scroll restoration
     }
   );
 
   return (
-	...
-  )
-}
-
-function App() {
-  return (
-	<Loader
-	  // Mandatory and it's the id of this loader
-	  loaderId="Loading one"
-	  // Optional, in case it is undefined it will use GlobalLoader component.
-	  loadingElement={<div>Loading Message</div>}
-	>
-	  children
-	</Loader>
-  )
-}
-
-export default App
+	// onScroll is optional because ref will do, but for cases where ref can't listen to onScroll the function does the job
+    <div ref={ref} onScroll={onScroll}>
+      {/* Your JSX */}
+    </div>
+  );
+};
 ```
+
+In this example, `useScrollRestoration` is used to manage scroll restoration based on the action parameter (which should be `'pop'` for restoration to work) and a unique `scrollRestorationId`. It provides a `scrollRestoration` function to restore scroll position and can be used in conjunction with other hooks like `useFetch` for seamless scroll restoration during navigation.
+
+_Note: If you choose not to use the `ref` returned by `useScrollRestoration`, the system will use the global `window` `onScroll` event to handle scroll restoration._
+
+## useFetchOnDependencyUpdate
+
+`useFetchOnDependencyUpdate` is a custom React hook designed to trigger all `useFetch` requests in mounted components when specified dependencies change. It helps remove the need to manually update dependencies for each `useFetch` call, providing a centralized way to manage fetch requests based on common dependencies.
+
+### Usage
+
+```javascript
+import { useFetchOnDependencyUpdate } from '@resourge/react-fetch';
+
+const MyComponent = ({ someDependency }) => {
+  // Call useFetchOnDependencyUpdate with the dependency array
+  useFetchOnDependencyUpdate([someDependency]);
+
+  // Other component logic
+
+  return (
+    <div>
+      {/* Your JSX */}
+    </div>
+  );
+};
+```
+
+### Parameters
+
+`useFetchOnDependencyUpdate` accepts two parameters:
+
+1. `deps`: An array of dependencies that will trigger all `useFetch` requests in mounted components when they change.
+1. `filterRequest`: An optional function to filter out requests not needed by the specified dependencies. The `id` parameter in the function is equal to the `id` used in the `useFetch` config.
+
+
+### Example
+
+```javascript
+import { useFetchOnDependencyUpdate } from '@resourge/react-fetch';
+
+const MyComponent = ({ userId }) => {
+  // Trigger all useFetch requests when 'userId' changes
+  useFetchOnDependencyUpdate([userId]);
+
+  // Other component logic
+
+  return (
+    <div>
+      {/* Your JSX */}
+    </div>
+  );
+};
+```
+
+## useIsOnline
+
+`useIsOnline` is a custom React hook designed to monitor the online status of the application. 
+
+### Example
+
+```javascript
+import { useIsOnline } from 'path/to/useIsOnline';
+
+const MyComponent = () => {
+  const isOnline = useIsOnline();
+
+  return (
+    <div>
+      <h1>Application Status</h1>
+      <p>{isOnline ? 'Online' : 'Offline'}</p>
+    </div>
+  );
+};
+
+```
+
+In this example, `useIsOnline` is used to monitor the online status of the application. The `isOnline` variable will be `true` when the application is online and `false` when offline. This can be useful for showing different UI components or handling network-related behavior accordingly.
