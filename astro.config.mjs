@@ -7,7 +7,10 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://resourge.vercel.app",
+  output: 'static',
+  outDir: 'dist',
+  site: 'https://archie-rp.github.io',
+  base: 'resourge-website',
   integrations: [
     mdx({
       syntaxHighlight: 'shiki',
@@ -15,16 +18,16 @@ export default defineConfig({
       gfm: true,
       optimize: true,
     }),
-    sitemap(),
+    //sitemap(),
     react(),
     tailwind({
       applyBaseStyles: false,
     }),
   ],
-  adapter: vercel({
+  /*adapter: vercel({
     webAnalytics: {
       enabled: true
     },
     maxDuration: 8
-  }),
+  }),*/
 });
