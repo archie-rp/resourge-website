@@ -9,7 +9,8 @@
     "build": "astro build",
     "astro": "astro",
     "publish": "astro build && vercel --prod",
-    "deploy-gh": "gh-pages -d dist"
+    "deploy-gh": "gh-pages -d dist",
+    "deploy-gh-d": "gh-pages -b gh-pages -d dist"
   },
   "dependencies": {
     "@astrojs/mdx": "^2.1.1",
