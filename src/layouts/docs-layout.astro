@@ -4,12 +4,13 @@ import Header from "@/components/layout/header.astro";
 import { SheetMobileNav } from "@/components/layout/sheet-mobile-nav";
 import { MainNavigationMenu } from "@/components/main-navigation-menu";
 import { buttonVariants } from "@/components/ui/button";
-import { docsConfig } from "@/config/docs";
+import { docsConfig, Libraries } from "@/config/docs";
 import { navMenuConfig } from "@/config/nav-menu";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import Icon from "astro-icon";
 import BaseLayout from "./base-layout.astro";
+import { getLibraryFromURL } from "@/lib/libraries";
 
 type Props = {
   title: string;
@@ -21,8 +22,39 @@ const currentPage = Astro.url.pathname;
 
 const githubLink = siteConfig.links.github;
 
+const libraryCode = getLibraryFromURL(currentPage);
+
+const getLibrarySidebar = (libraryCode: string) => {
+  switch (libraryCode) {
+    case Libraries.ReactForm:
+        return 'https://github.com/resourge/react-form'
+    case Libraries.Vue3HookForm:
+        return 'https://github.com/resourge/vue3-hook-form';
+    case Libraries.Vue3UseAuthentication:
+        return 'https://github.com/resourge/vue3-use-authentication';
+    case Libraries.Schema:
+      return 'https://github.com/resourge/schema';
+    case Libraries.Router:
+      return 'https://github.com/resourge/react-router';
+    case Libraries.Table:
+      return 'https://github.com/resourge/react-hook-table';
+    case Libraries.ReactSearchParams:
+      return 'https://github.com/resourge/react-search-params';
+    case Libraries.Fetch:
+      return 'https://github.com/resourge/fetch';
+    case Libraries.HttpService:
+      return 'https://github.com/resourge/fetch/tree/master/packages/http-service';
+    case Libraries.Translations:
+      return 'https://github.com/resourge/translations/tree/master/packages/react-translations';
+    case Libraries.ReactAuthentication:
+      return 'https://github.com/resourge/authentication';
+    default:
+      return 'https://github.com/resourge';
+  }
+};
+
 const packageGithubLink = currentPage.includes("docs")
-  ? `${githubLink}${currentPage.split("/")[2]}`
+  ?  getLibrarySidebar(libraryCode)
   : githubLink;
 
 const nameGithub = currentPage.includes("docs")
@@ -40,7 +72,6 @@ const nameGithub = currentPage.includes("docs")
       slot="mobile-nav-header"
       client:load
     />
-
     <nav slot="right-header" >
       <div class="flex gap-2 items-inherit items-center">
         <a href={packageGithubLink} target="_blank" rel="noreferrer">

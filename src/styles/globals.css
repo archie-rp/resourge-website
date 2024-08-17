@@ -1,14 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Base Layer Improvements */
 @layer base {
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
 
+    --docs-foreground: rgb(255, 255, 255);
+
+    --features: 210, 40%, 96.1%;
+    
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
@@ -39,8 +43,13 @@
   }
 
   .dark {
-    --background: 224 71% 4%;
+    --background: 222, 28%, 12%;
+
+    --features: 222, 28%, 18%;
+
     --foreground: 213 31% 91%;
+    
+    --docs-foreground: rgb(30 41 59);
 
     --muted: 223 47% 11%;
     --muted-foreground: 215.4 16.3% 56.9%;
@@ -70,9 +79,7 @@
 
     --radius: 0.5rem;
   }
-}
 
-@layer base {
   @font-face {
     font-family: 'CalSans Semibold';
     src: url('/fonts/calsans-semibold.woff2') format('woff2');
@@ -85,37 +92,12 @@
     @apply border-border;
   }
 
-  /* If you want a custom scrollbar - By @diomed */
-  /* * {
-    @apply border-border;
-    --sb-track-color: #ffffff;
-    --sb-thumb-color: #e2e3f1;
-    --sb-size: 10px;
-
-    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
-  }
-
-  ::-webkit-scrollbar {
-    width: var(--sb-size)
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--sb-track-color);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--sb-thumb-color);
-    border-radius: 10px;
-  } */
-
   html {
-    /* scroll-padding-top: 4rem; */
     @apply scroll-pt-16 lg:scroll-pt-0;
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -123,29 +105,54 @@
     text-wrap: balance;
   }
 
-  /* Documentation part */
+  .text-gradient_indigo-purple {
+    background: linear-gradient(90deg, #6366f1 0%, rgb(168 85 247 / 0.9) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Adding smooth transitions */
+  a, button, input, select, textarea {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Hover effects for buttons and links */
+  a:hover, button:hover {
+    @apply text-primary;
+  }
+
+  /* Slightly rounded buttons and input fields */
+  button, input, select, textarea {
+    @apply rounded-md;
+  }
+
+  /* Improving MdxComponent Code Styling */
+  :not(pre) > code {
+    @apply relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-sm bg-background text-foreground;
+  }
+
+  /* Better highlighting for code blocks */
+  pre {
+    @apply bg-slate-900 text-white p-4 rounded-lg overflow-x-auto;
+  }
+
+  /* Documentation Grid Improvement */
   .docs-grid-cols-2 {
-    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-4;
+    @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2 gap-6;
+  }
+
+  /* Improve Callout Styling */
+  .callout {
+    @apply flex items-start bg-muted p-4 rounded-lg;
   }
 
   .callout > * {
     @apply my-0 !important;
   }
-  
+
   .font-icon-callout {
     font-family: Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    @apply mr-3;
   }
-
-  /* MdxComponent: For <code></code> with no parent <pre></pre> */
-  :not(pre) > code {
-    @apply relative rounded border px-[0.3rem] py-[0.2rem] font-mono text-sm bg-background text-foreground;
-  }
-}
-
-.text-gradient_indigo-purple {
-  background: linear-gradient(90deg, #6366f1 0%, rgb(168 85 247 / 0.9) 100%);
-  /* background: linear-gradient(83.21deg,#3245ff 0%,#bc52ee 100%); */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }

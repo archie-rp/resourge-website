@@ -24,11 +24,13 @@ module.exports = {
         "18": "4.5rem",
       },
       colors: {
+        featureBackground: 'hsl(var(--features))',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        docsForeground: "var(--docs-foreground)",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

@@ -58,7 +58,7 @@ const ListItem: React.FC<MenuItem> = ({
         href={disabled ? undefined : href}
         target={target}
         className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-violet-800 hover:text-accent-foreground focus:bg-violet-800 focus:text-accent-foreground",
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors border-2 border-slate-900 bg-featureBackground px-5 py-4 hover:border-solid hover:border-1 hover:border-violet-400",
           disabled
             ? "text-muted-foreground hover:bg-transparent hover:text-muted-foreground"
             : ""
