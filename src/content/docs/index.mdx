@@ -1,0 +1,74 @@
+---
+title: Welcome to Resourge
+description: Simplify your development with Resourge.
+template: splash
+hero:
+  tagline: Simplify your development with Resourge
+  image:
+    file: ../../assets/logo.png
+  actions:
+    - text: Get Started
+      link: /introduction
+      icon: right-arrow
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+
+<section style={{ textAlign: "center", margin: "2rem 0" }}>
+  <h1 style={{ fontSize: "2.5rem", fontWeight: "bold" }}>
+    Simplify your development with <span style={{ background: "linear-gradient(90deg, indigo, purple)", WebkitBackgroundClip: "text", color: "transparent" }}>Resourge</span>
+  </h1>
+  <p style={{ marginTop: "1rem", fontSize: "1.25rem", color: "#666", maxWidth: "40rem", marginLeft: "auto", marginRight: "auto" }}>
+    Resourge provides a suite of tools and libraries to help you streamline your development process, whether you’re building a new application or improving an existing one.
+  </p>
+</section>
+
+## Features
+
+<CardGrid>
+  <LinkCard
+    title="React Form"
+    href="/react-form/intro"
+    description="Effortlessly manage complex forms in React with extensive validation options and custom components. Perfect for building dynamic user interfaces with ease."
+  />
+  <LinkCard
+    title="Vue 3 Hook Form"
+    href="/vue3-hook-form/intro"
+    description="Streamline form handling in Vue 3 with a library designed for simplicity and flexibility. Customize validation and form logic without hassle."
+  />
+  <LinkCard
+    title="Schemas"
+    href="/schema/intro"
+    description="Enhance your data validation processes with support for nested schemas and custom validation rules. Ideal for ensuring data integrity in complex applications."
+  />
+  <LinkCard
+    title="Translations"
+    href="/translations/intro"
+    description="Simplify the creation of multilingual applications with a straightforward API for managing translation keys and handling multiple languages effortlessly."
+  />
+  <LinkCard
+    title="React Router"
+    href="/react-router/intro"
+    description="Implement client-side routing in your React applications seamlessly, reducing the need for server-side requests and improving user experience."
+  />
+  <LinkCard
+    title="Fetch"
+    href="/fetch/intro"
+    description="Make API requests in your React app with a user-friendly service that includes features like caching and automatic retries. Enhance your data-fetching strategy."
+  />
+  <LinkCard
+    title="Http Service"
+    href="/http-service/intro"
+    description="Manage HTTP requests with ease using a simple and powerful API. Ideal for handling various types of network operations in your JavaScript applications."
+  />
+  <LinkCard
+    title="React Authentication"
+    href="/react-authentication/intro"
+    description="Integrate authentication into your React applications with a comprehensive system for managing user sessions and security features."
+  />
+  <LinkCard
+    title="Vue 3 Authentication"
+    href="/vue3-use-authentication/intro"
+    description="Implement authentication in Vue 3 applications with a robust system designed for handling user sessions and securing your application."
+  />
+</CardGrid>
