@@ -1,23 +1,30 @@
 ---
 title: React Form
-description: Introduction to React Form.
+description: A powerful React hook library for building complex forms with ease, performance, and type safety
 ---
 
-Welcome to React Form!  
-See below for when and why to use this package, installation, and a quick start.
+`@resourge/react-form` is a powerful and flexible React hook library designed to simplify building complex and dynamic forms with ease, while maintaining excellent performance and type safety.
 
-## When to use
+## When to Use
 
-Use React Form for complex or dynamic forms, nested fields, custom validation, and when you want type safety and performance in React.
+Choose React Form when you need:
 
-## Why use this?
+* Complex form structures, including nested and dynamic fields
+* Custom validation logic tailored to your application
+* High performance with minimal re-renders
+* Strong TypeScript support for safer, predictable forms
+* Compatibility with any UI component library
 
-- Declarative API
-- Minimal re-renders
-- Works with any UI library
-- TypeScript support
+## Why React Form?
+
+* ⚛️ **Declarative API**: Manage forms intuitively with hooks and plain JavaScript
+* 🚀 **Minimal Re-renders**: Optimized to update only the parts of the form that change
+* 🔧 **Flexible**: Works seamlessly with any UI framework or custom components
+* 🛡️ **TypeScript Friendly**: Full typings to catch errors early and improve DX
 
 ## Installation
+
+Install with NPM or Yarn:
 
 ```bash
 npm install @resourge/react-form
@@ -25,29 +32,34 @@ npm install @resourge/react-form
 yarn add @resourge/react-form
 ```
 
-## Quick Start
+## Quick Start Example
 
-```js
+```tsx
+import React from "react";
 import { useForm } from "@resourge/react-form";
 
-const MyForm = () => {
+function MyForm() {
   const { form, handleSubmit, field, hasError, getErrors } = useForm({
     username: "",
     password: "",
   });
 
-  const onSubmit = handleSubmit((data) => console.log("Form Submitted:", data));
+  const onSubmit = handleSubmit((data) => {
+    console.log("Form submitted:", data);
+  });
 
   return (
     <form onSubmit={onSubmit}>
       <input {...field("username")} placeholder="Username" />
       {hasError("username") && <span>{getErrors("username")[0]}</span>}
 
-      <input {...field("password")} placeholder="Password" type="password" />
+      <input {...field("password")} type="password" placeholder="Password" />
       {hasError("password") && <span>{getErrors("password")[0]}</span>}
 
       <button type="submit">Submit</button>
     </form>
   );
-};
+}
+
+export default MyForm;
 ```

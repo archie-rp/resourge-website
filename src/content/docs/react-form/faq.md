@@ -1,39 +1,34 @@
 ---
-title: Vue 3 Form Hook FAQ
-description: Frequently asked questions about @resourge/vue3-hook-form.
----
+title: React Form FAQ
+description: Frequently asked questions about @resourge/react-form.
+-------------------------------------------------------------------
 
-# FAQ
+**Q: What is `@resourge/react-form`?**
+A: It is a React library designed to help you easily create, manage, and validate complex forms with minimal boilerplate.
 
-**Q: What is `vue3-hook-form`?**  
-A: A lightweight, strongly-typed Vue 3 composable hook for managing form state, validation, and submission.
+**Q: How do I get started with `@resourge/react-form`?**
+A: Install the package, then use the provided hooks and components to define form fields, handle input, and manage validation state.
 
-**Q: Why use `vue3-hook-form` over other Vue form libraries?**  
-A: Minimal re-renders, full TypeScript support, UI-library agnostic, declarative API, and support for complex and nested forms.
+**Q: Does `@resourge/react-form` support schema validation?**
+A: Yes, it integrates seamlessly with validation schemas like Yup or Zod to provide robust type-safe validation.
 
-**Q: Is it compatible with any UI framework?**  
-A: Yes, works with any Vue 3 component library or custom components.
+**Q: Can I use it with controlled and uncontrolled components?**
+A: The library is optimized for controlled components but supports flexible integration to suit most use cases.
 
-**Q: Does it support custom validation?**  
-A: Yes, you can pass synchronous or asynchronous validation functions, commonly with `@resourge/schema`.
+**Q: How does it handle form submission?**
+A: You define a submit handler function that receives validated form data, and the library manages form state and error handling during submission.
 
-**Q: Can I create dynamic or nested forms?**  
-A: Yes, it fully supports dynamic, multi-step, and deeply nested forms.
+**Q: Can I perform asynchronous validation?**
+A: Yes, async validation is supported to handle server-side or complex validation scenarios.
 
-**Q: How do I check for validation errors?**  
-A: Use the `hasError(fieldName)` and `getErrors(fieldName)` methods from the form instance.
+**Q: How can I reset or clear the form?**
+A: The form instance exposes methods like `reset()` and `clear()` to reset fields to initial values or empty states.
 
-**Q: How do I reset the form?**  
-A: Call the `reset()` method optionally with new default values.
+**Q: Is it compatible with TypeScript?**
+A: Absolutely! `@resourge/react-form` is fully typed, providing autocomplete and type safety for form fields and validation.
 
-**Q: Can I watch form data changes?**  
-A: Yes, use the `watch(callback)` method to react to form updates.
+**Q: How do I handle dynamic fields or field arrays?**
+A: The library includes utilities to manage dynamic form fields and arrays, making it easy to add or remove fields on the fly.
 
-**Q: Do I need a global provider or context?**  
-A: No, form state is managed locally inside the composable.
-
-**Q: Is TypeScript supported?**  
-A: Yes, the hook is fully typed for strong type safety.
-
-**Q: How can I contribute?**  
-A: See the [`CONTRIBUTING.md`](https://github.com/resourge/vue3-hook-form/blob/main/CONTRIBUTING.md) file in the repo for guidelines.
+**Q: Where can I find more help or support?**
+A: You can open issues or discussions in the GitHub repository for `@resourge/react-form` for community and maintainer support.

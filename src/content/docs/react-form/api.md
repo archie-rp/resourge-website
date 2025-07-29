@@ -207,30 +207,6 @@ const { context, field } = useFormContext<FormData>();
 
 ---
 
-## Error Options
-
-Used with `getErrors`, `hasError`, etc.
-
-| Option                   | Description               |
-| ------------------------ | ------------------------- |
-| `includeChildsIntoArray` | Include nested errors     |
-| `unique`                 | Return unique errors only |
-
----
-
-## handleSubmit
-
-Signature for the form submission handler:
-
-```ts
-handleSubmit(
-  onValid: (formData) => void,
-  onInvalid?: (errors) => Record<string, string[]>
-): (event) => Promise<any>
-```
-
----
-
 ## Example
 
 ```tsx

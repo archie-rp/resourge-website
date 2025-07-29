@@ -1,148 +1,121 @@
 ---
-title: React Authentication Examples
-description: Practical usage examples of the @resourge/react-authentication package in React applications.
+title: Vue 3 Use Authentication Examples
+description: Practical examples for using @resourge/vue3-use-authentication.
 ---
 
-Practical usage examples of the `@resourge/react-authentication` package in real-world React applications.
+## 1. Basic Setup in `App.vue`
+
+```vue
+<script lang="ts" setup>
+import { AuthenticationProvider } from '@resourge/vue3-use-authentication'
+
+const SESSION_STORAGE_KEY = 'my-app-session'
+const ENCRYPTED_SECRET = 'my-super-secret-key'
+</script>
+
+<template>
+  <AuthenticationProvider
+    :localStorageSessionKey="SESSION_STORAGE_KEY"
+    encrypted
+    :encryptedSecret="ENCRYPTED_SECRET"
+  >
+    <router-view />
+  </AuthenticationProvider>
+</template>
+````
 
 ---
 
-## Setup Authentication
+## 2. Define `Profile` and `Permissions`
 
-```tsx
-import { setupAuthentication } from '@resourge/react-authentication';
+`Profile.ts`
 
-const authentication = setupAuthentication({
-  getProfile: async (token) => {
-    return {
-      user: { id: 1, username: 'john' },
-      permissions: { admin: true }
-    };
-  },
-  refreshToken: async (token, refreshToken) => {
-    // Your refresh logic
-  },
-  storage: localStorage
-});
+```ts
+export class Profile {
+  id: string
+  name: string
+  email: string
+
+  constructor(id: string, name: string, email: string) {
+    this.id = id
+    this.name = name
+    this.email = email
+  }
+}
 ```
 
----
+`Permissions.ts`
 
-## Basic Usage with `AuthenticationSystem`
+```ts
+export default class Permissions {
+  isAdmin: boolean
+  isUser: boolean
 
-```tsx
-import {
-  AuthenticationSystem,
-  setupAuthentication
-} from '@resourge/react-authentication';
-import LoadingSpinner from './LoadingSpinner';
-
-const authentication = setupAuthentication({
-  getProfile: async (token) => {
-    return {
-      user: { id: 1, username: 'john' },
-      permissions: { admin: true }
-    };
-  },
-  refreshToken: async () => { /* ... */ },
-  storage: localStorage
-});
-
-function App() {
-  return (
-    <AuthenticationSystem
-      authentication={authentication}
-      loadingComponent={<LoadingSpinner />}
-    >
-      <YourApp />
-    </AuthenticationSystem>
-  );
+  constructor(roles: string[] = []) {
+    this.isAdmin = roles.includes('admin')
+    this.isUser = roles.includes('user')
+  }
 }
 ```
 
 ---
 
-## Handling Authentication Errors
-
-```tsx
-<AuthenticationSystem
-  authentication={authentication}
-  onError={(error, errorInfo) => {
-    console.error('Auth error:', error);
-  }}
-  errorComponent={<div>Something went wrong</div>}
-/>
-```
-
----
-
-## Custom Storage
-
-```tsx
-setupAuthentication({
-  getProfile: async (token) => {
-    // Fetch user profile
-  },
-  refreshToken: async (token, refreshToken) => {
-    // Refresh logic
-  },
-  storage: {
-    getItem: (key) => sessionStorage.getItem(key),
-    setItem: (key, value) => sessionStorage.setItem(key, value),
-    removeItem: (key) => sessionStorage.removeItem(key)
-  }
-});
-```
-
----
-
-## Using `SessionService`
+## 3. Using `useAuthentication` in a Component
 
 ```ts
-import { SessionService } from '@resourge/react-authentication';
+import { defineComponent } from 'vue'
+import useAuthentication from './shared/authentication/user/useAuthentication'
 
-await SessionService.login('email@example.com', 'password123');
+export default defineComponent({
+  setup() {
+    const { isAuthenticated, user, login, logout } = useAuthentication()
 
-const token = await SessionService.getToken();
-console.log('Current token:', token);
+    function performLogin() {
+      login(new Profile('123', 'John Doe', 'john@example.com'), new Permissions(['user']), 'token123', 'cookie123')
+    }
 
-await SessionService.logout();
+    return {
+      isAuthenticated,
+      user,
+      login: performLogin,
+      logout
+    }
+  }
+})
 ```
 
 ---
 
-## ErrorBoundary Usage
+## 4. Using `usePermissions` to Check Permissions
 
-```tsx
-import { ErrorBoundary } from '@resourge/react-authentication';
+```ts
+import { defineComponent } from 'vue'
+import usePermissions from './shared/authentication/user/usePermissions'
 
-<ErrorBoundary
-  errorComponent={(error) => <p>Oops: {error.message}</p>}
-  onError={(error, info) => console.error(error)}
->
-  <App />
-</ErrorBoundary>
+export default defineComponent({
+  setup() {
+    const { isAdmin, isUser } = usePermissions()
+
+    return {
+      isAdmin,
+      isUser
+    }
+  }
+})
 ```
 
 ---
 
-## Accessing Contexts
+## 5. Access Authentication State Outside Components (e.g., in Router)
 
-```tsx
-import {
-  useAuthenticationContext,
-  usePermissionsContext
-} from '@resourge/react-authentication';
+```ts
+import { useAuthenticationStorage } from '@resourge/vue3-use-authentication'
+import { Profile } from './User'
+import Permissions from './Permissions'
 
-function Dashboard() {
-  const auth = useAuthenticationContext();
-  const permissions = usePermissionsContext();
+const { isAuthenticated, user } = useAuthenticationStorage<Profile, Permissions>()
 
-  return (
-    <>
-      <p>User: {auth.user?.username}</p>
-      {permissions.admin && <p>You are an admin.</p>}
-    </>
-  );
+if (isAuthenticated.value) {
+  console.log('User is authenticated:', user.value)
 }
 ```

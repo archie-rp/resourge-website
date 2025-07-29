@@ -3,58 +3,192 @@ title: API Reference – vue3-use-authentication
 description: Full API reference for @resourge/vue3-use-authentication
 ---
 
-## `useAuthentication()`
-
-The core hook that provides access to all authentication-related logic.
-
-### Returns
-
-```ts
-{
-  isAuthenticated: Ref<boolean>
-  user: Ref<User | null>
-  login: (credentials: LoginPayload) => Promise<void>
-  logout: () => Promise<void>
-  refresh: () => Promise<void>
-}
-````
-
-* **`isAuthenticated`** – A `Ref<boolean>` indicating if the user is currently authenticated.
-* **`user`** – A `Ref<User | null>` representing the current user object (or `null` if not authenticated).
-* **`login(credentials)`** – Logs in the user with the provided credentials. Resolves when complete.
-* **`logout()`** – Logs out the current user and clears the session.
-* **`refresh()`** – Refreshes the user session (e.g., re-fetching or validating the session/token).
+`@resourge/react-authentication` is a flexible authentication system for React applications, offering utilities and components for managing users, sessions, and permission-based access. This API reference provides full usage details for every core feature and method in the package.
 
 ---
 
-## Example Usage
+## setupAuthentication
+
+Initializes the authentication logic outside of components.
+
+### Parameters
 
 ```ts
-import { useAuthentication } from '@resourge/vue3-use-authentication'
-
-const { isAuthenticated, user, login, logout, refresh } = useAuthentication()
-
-watchEffect(() => {
-  if (isAuthenticated.value) {
-    console.log('User is logged in as', user.value?.name)
-  }
+setupAuthentication({
+  getProfile,
+  refreshToken,
+  storage,
+  useSuspense,
 })
+```
+
+| Option         | Type                                                       | Required | Description                                                                       |
+| -------------- | ---------------------------------------------------------- | -------- | --------------------------------------------------------------------------------- |
+| `getProfile`   | `(token: string) => Promise<UserProfile>`                  | ✅        | Retrieves user data from a token.                                                 |
+| `refreshToken` | `(token: string, refreshToken: string) => Promise<string>` | ✅        | Returns a new token using refreshToken.                                           |
+| `storage`      | `StorageAdapter`                                           | ❌        | Interface for persistent storage (`localStorage`, `AsyncStorage`, etc.).          |
+| `useSuspense`  | `boolean`                                                  | ❌        | Whether to use Suspense to delay rendering until auth is ready (default: `true`). |
+
+---
+
+## StorageAdapter
+
+To persist tokens, define a `storage` object:
+
+```ts
+const storage = {
+  getItem: (key: string) => localStorage.getItem(key),
+  setItem: (key: string, value: string) => localStorage.setItem(key, value),
+  removeItem: (key: string) => localStorage.removeItem(key),
+}
+```
+
+All methods support both sync and async patterns.
+
+---
+
+## AuthenticationSystem
+
+Wraps your application to provide context, error handling, and fallback UI.
+
+### Props
+
+```tsx
+<AuthenticationSystem
+  authentication={authentication}
+  onLogin={(username, password) => Promise<string>}
+  onLogout={(token) => void | Promise<void>}
+  getToken={(getToken, user, permissions) => void}
+  errorComponent={<ErrorComponent />}
+  onError={(error, info) => void}
+  redirectOnError={true}
+/>
+```
+
+| Prop              | Required | Description                           |
+| ----------------- | -------- | ------------------------------------- |
+| `authentication`  | ✅        | Output from `setupAuthentication`.    |
+| `onLogin`         | ❌        | Custom login function.                |
+| `onLogout`        | ❌        | Custom logout handler.                |
+| `getToken`        | ❌        | Callback for when token is retrieved. |
+| `errorComponent`  | ❌        | UI shown on error.                    |
+| `onError`         | ❌        | Error handler callback.               |
+| `redirectOnError` | ❌        | If `true`, rerenders after error.     |
+
+---
+
+## Hooks
+
+### `useAuthenticationContext()`
+
+Access authentication context values and functions:
+
+```ts
+const {
+  user,
+  token,
+  refreshToken,
+  logout,
+  isAuthenticated,
+  setAuthenticationError,
+} = useAuthenticationContext();
+```
+
+### `usePermissionsContext()`
+
+Get access to current user permissions:
+
+```ts
+const permissions = usePermissionsContext();
 ```
 
 ---
 
-## Type Definitions
+## SessionService
+
+Utility service to perform auth actions programmatically (e.g., outside components).
 
 ```ts
-interface LoginPayload {
-  username: string
-  password: string
-}
+import { SessionService } from '@resourge/react-authentication'
+```
 
-interface User {
-  id: string
-  name: string
-  email?: string
-  [key: string]: unknown
+### Methods
+
+* **`authenticate()`**
+  Fetch user profile from stored token.
+
+* **`login(username: string, password: string): Promise<boolean>`**
+  Perform login manually.
+
+* **`logout(): Promise<void>`**
+  Clear stored session and token.
+
+* **`refreshToken(): Promise<boolean>`**
+  Get a new token using the stored refresh token.
+
+* **`setToken(token: string, refreshToken?: string): Promise<boolean>`**
+  For custom auth providers like OAuth, Google, etc.
+
+* **`setAuthenticationError(error: Error)`**
+  Register a manual error in the context.
+
+* **`getToken(): Promise<string | null>`**
+  Returns current token, refreshing it if needed.
+
+---
+
+## ErrorBoundary
+
+A component to gracefully handle render errors.
+
+### Usage
+
+```tsx
+<ErrorBoundary
+  errorComponent={(error) => <div>Error: {error.message}</div>}
+  onError={(err, info) => console.error(err)}
+  redirectOnError={true}
+>
+  <App />
+</ErrorBoundary>
+```
+
+| Prop              | Required | Description                             |
+| ----------------- | -------- | --------------------------------------- |
+| `children`        | ✅        | Your application components.            |
+| `errorComponent`  | ❌        | Shown on error (ReactNode or function). |
+| `onError`         | ❌        | Custom error handler.                   |
+| `redirectOnError` | ❌        | Rerenders the app if error occurs.      |
+
+---
+
+## Example
+
+```tsx
+const authentication = setupAuthentication({
+  getProfile: async (token) => {
+    return {
+      user: { id: 123, name: 'John Doe' },
+      permissions: { admin: true }
+    };
+  },
+  refreshToken: async (token, refreshToken) => {
+    const response = await fetch('/refresh', { method: 'POST' });
+    const { newToken } = await response.json();
+    return newToken;
+  },
+  storage: localStorage,
+});
+
+function App() {
+  return (
+    <AuthenticationSystem
+      authentication={authentication}
+      loadingComponent={<div>Loading...</div>}
+      onError={(error) => console.error('Auth error', error)}
+    >
+      <MainRoutes />
+    </AuthenticationSystem>
+  );
 }
 ```
